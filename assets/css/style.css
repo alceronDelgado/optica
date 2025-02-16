@@ -1,0 +1,59 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+:root{
+/* colores */
+--primary: #f1f1f3;
+--secundary: #b3cff7;
+--other: #2fc1ff;
+
+}
+
+body,html{
+    height: 100%;
+    margin: 0;
+}
+
+.container{
+
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center;  /* Centrar verticalmente */
+    height: 100vh; /* Hace que el contenedor ocupe toda la altura de la ventana */
+    width: 450px;
+    padding: 2rem;
+    flex-direction: column;
+      
+    span{
+        font-size: 2.5rem;
+        justify-content: center;
+    }
+
+    .form{
+
+    width: 300px; 
+    padding: 20px;
+        .buttom{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            #submit{
+                width: 8em;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+    }
+
+
+    
+}
