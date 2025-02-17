@@ -1,0 +1,44 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+:root{
+/* colores */
+--background: #E8EBED;
+--btns: #1B3249;
+--other: #2fc1ff;
+--barra: #b1e8f8;
+
+}
+
+body,html{
+    height: 100%;
+    margin: 0;
+}
+
+
+#spanId {
+    background: var(--other);
+}
+
+.table{
+    display: block;
+    height: 90vh;
+
+    #parrafo{
+        border: 1px solid black;
+    }
+}
+
+#menuDrop{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(100vh - 90vh);
+    border: 1px solid black;
+    
+}
