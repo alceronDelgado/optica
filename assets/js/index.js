@@ -11,11 +11,9 @@
  * 
  */
 
-
 $(document).ready(function(){
     $('select').formSelect();  // Inicializa los select de Materialize
     M.updateTextFields(); // Asegura que los campos de texto (input) se muestren correctamente
-
 
     //Función submit
     $('#submit').click(function(e){
@@ -27,7 +25,6 @@ $(document).ready(function(){
         let password = $('#usu_clave').val();
 
         console.log(rol, documento, password);
-
 
         $.ajax({
             type: "POST",

@@ -29,14 +29,113 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol'])){
     </div>
 </div>
 
-<div class="col s9 center table">
-    <p id="parrafo"> 
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora optio, at quidem explicabo possimus qui molestiae. Et sequi adipisci tenetur illo magni. Omnis harum dolorem dolores nobis velit, perferendis quos!
-    Sit beatae dolorem fugit error fugiat provident. Temporibus velit, repellendus dolore nisi, reprehenderit voluptates iste natus cumque nam, eligendi placeat sapiente adipisci quaerat qui voluptatum consequuntur facilis? Tempore, iste blanditiis!
-    Maiores aperiam eum ut unde maxime sit sapiente alias! Laborum delectus accusantium provident. Ea, quo quod adipisci, in culpa dolor, impedit sapiente voluptas aperiam distinctio nulla id esse itaque quam!
-    </p>
-    
+
+<div class="table">
+    <table id="myTable" class="responsive-table striped highlight table">
+    <div class="col s12 m7 center-align">
+        <caption class=" flow-text">Pacientes</caption>
+    <div>
+    <thead>
+        <tr>
+            <th class="left-align">Motivo de consulta</th>
+            <th>Informacion</th>
+            <th>Otro</th>
+            <th>Acciones</th>
+            <th>Acciones</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>Tiger Nixon</td>
+        <td>System Architect</td>
+        <td>Edinburgh</td>
+        <td>61</td>
+        <td>2011-04-25</td>
+        <td>$320,800</td>
+    </tr>
+            <tr>
+                <td>Garrett Winters</td>
+                <td>Accountant</td>
+                <td>Tokyo</td>
+                <td>63</td>
+                <td>2011-07-25</td>
+                <td>$170,750</td>
+            </tr>
+            <tr>
+                <td>Ashton Cox</td>
+                <td>Junior Technical Author</td>
+                <td>San Francisco</td>
+                <td>66</td>
+                <td>2009-01-12</td>
+                <td>$86,000</td>
+            </tr>
+            <tr>
+                <td>Cedric Kelly</td>
+                <td>Senior Javascript Developer</td>
+                <td>Edinburgh</td>
+                <td>22</td>
+                <td>2012-03-29</td>
+                <td>$433,060</td>
+            </tr>
+            <tr>
+                <td>Airi Satou</td>
+                <td>Accountant</td>
+                <td>Tokyo</td>
+                <td>33</td>
+                <td>2008-11-28</td>
+                <td>$162,700</td>
+            </tr>
+            <tr>
+                <td>Brielle Williamson</td>
+                <td>Integration Specialist</td>
+                <td>New York</td>
+                <td>61</td>
+                <td>2012-12-02</td>
+                <td>$372,000</td>
+            </tr>
+            <tr>
+                <td>Herrod Chandler</td>
+                <td>Sales Assistant</td>
+                <td>San Francisco</td>
+                <td>59</td>
+                <td>2012-08-06</td>
+                <td>$137,500</td>
+            </tr>
+            <tr>
+                <td>Rhona Davidson</td>
+                <td>Integration Specialist</td>
+                <td>Tokyo</td>
+                <td>55</td>
+                <td>2010-10-14</td>
+                <td>$327,900</td>
+            </tr>
+            <tr>
+                <td>Colleen Hurst</td>
+                <td>Javascript Developer</td>
+                <td>San Francisco</td>
+                <td>39</td>
+                <td>2009-09-15</td>
+                <td>$205,500</td>
+            </tr>
+            <tr>
+                <td>Sonya Frost</td>
+                <td>Software Engineer</td>
+                <td>Edinburgh</td>
+                <td>23</td>
+                <td>2008-12-13</td>
+                <td>$103,600</td>
+            </tr>
+            <tr>
+                <td>Jena Gaines</td>
+                <td>Office Manager</td>
+                <td>London</td>
+                <td>30</td>
+                <td>2008-12-19</td>
+                <td>$90,560</td>
+            </tr>
+    </table>
 </div>
+
 
 
 <menu id="menuDrop">
@@ -46,6 +145,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol'])){
 </menu>
 
 <?php require_once '../assets/templates/imports.php'; ?>
+<script src="../assets/js/dashboard.js"></script>
 <script src="../assets/js/index.js"></script>
 </body>
 </html>
