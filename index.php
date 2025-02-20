@@ -10,9 +10,7 @@ require_once 'src/querys/functionsSelects.php';
 <html lang="en">
 
 <head>
-
     <?php require_once 'assets/templates/head.php'; ?>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clinica de la visión</title>
