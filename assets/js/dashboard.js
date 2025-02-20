@@ -18,4 +18,10 @@ $(document).ready( function () {
       }
     });
 
+
+    $('#btnAddPaciente').click(function() {
+      $("#myModal").fadeIn();
+      console.log('Modal abierto');
+  });
+
 } );

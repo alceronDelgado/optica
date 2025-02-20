@@ -22,18 +22,24 @@ body,html{
 
 #spanId {
     background: var(--other);
+    width: 100%;
 }
 
 .table{
     /* display: grid; */
-    height: 30vh;
+    height: 60vh;
     margin: 0 auto;
     width: 50%;
-    padding: 2rem;
-    background-color: yellow;
-    border: 1px solid var(--btns);
+    padding: 1.3rem;
+    transform: translateY(10%);
+
+    #titleUser{
+        font-size: 2rem;
+    }
+
     .dt-search{
         width: 15rem;
+        height: 3rem;
         
         /* Tamaño del input de busqueda. */
         #dt-search-0{
@@ -46,14 +52,36 @@ body,html{
 /* Editar boton de busqueda */
 
 
-
-
-#menuDrop{
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: calc(100vh - 90vh);
+/* #menuDrop{
+    display: flex;
+    width: 50%;
+    height: calc(100vh - 90);
     border: 1px solid black;
-    
+    margin: 0 auto;
+} */
+
+#menuDrop {
+    position: fixed; 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    display: flex; 
+    justify-content: space-around; 
+    width: 50%; 
+    background-color: var(--background); 
+    padding: 1rem;
+    border: 1px solid black;
+}
+
+/* Modal */
+#myModal{
+    display: none;
+    width: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Genera un scrollbar en caso de que el contenido sea mayor al tamaño del contenedor. */
+    overflow: auto;
+    /* El tamaño dependerá del las cosas que tenga el contenedor. */
+    height: auto; 
 }
