@@ -84,4 +84,17 @@ body,html{
     overflow: auto;
     /* El tamaño dependerá del las cosas que tenga el contenedor. */
     height: auto; 
+
+    .labelText{
+        font-size: 1.5rem;
+    }
+
+    .close{
+        font-size: 40px;
+    }
+
+    #btnSavePaciente{
+        text-align: center;
+    }
+
 }

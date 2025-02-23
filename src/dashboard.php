@@ -1,8 +1,10 @@
 <?php 
 
 session_start();
-include_once 'querys/functionsInsert.php';
 include_once '../config/conn.php';
+include_once 'querys/functionsInsert.php';
+include_once 'querys/functionsSelects.php';
+
 if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['rolNombre'])){
 
     header("location:../index.php");
@@ -37,10 +39,8 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
 </div>
 
 
-
-
 <div class="table">
-    <h1 class="center-align" id="titleUser">Lista de Usuarios</h1>
+    <h1 class="center-align" id="titleUser"></h1>
     <table class="responsive-table striped highlight bordered" id="myTable">
       <thead>
         <tr>
@@ -74,8 +74,6 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
   </div>
 
 
-
-
 <div id="menuDrop">
     <button id="btnAddPaciente">
         <i class="large material-icons">group_add</i>
@@ -86,14 +84,65 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
 
 <div class="modal" id="myModal">
     <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Añadir Paciente</h2>
+      <div class="row backgroundModal">
+        <div class="col s1">
+          <span class="close">&times;</span>
+        </div>
+        <div class="col s11 center-align " id="">
+          <h2 id="modalTitle"></h2>
+        </div>
+      </div>
         <form action="" method="post">
-            <input type="text">
-            <input type="text">
-            <input type="text">
-            <input type="button" value="Guardar">
-        </form>
+          <div class="row">
+            
+          <div class="col s6 m6">
+            <label for="" id="labelDocumento" class="labelText"></label>
+            <input type="number" name="documento" id="documentoPaciente" placeholder="Nro de documento">
+          </div>
+
+          <div class="col s6 m6">
+            <label for="" id="labelNombre" class="labelText"></label>
+            <input type="text" name="nombre" id="nombrePaciente" placeholder="Nombre">
+          </div>
+
+          <div class="col s6 m6">
+            <label for="" id="labelApellido" class="labelText"></label>
+            <input type="text" name="apellido" id="apellidoPaciente" placeholder="Apellido">
+          </div>
+          <div class="col s6 m6">
+            <label for="" id="labelDireccion" class="labelText"></label>
+            <input type="text" name="direccion" id="apellidoPaciente" placeholder="direccion">
+          </div>
+          <div class="col s6 m6">
+            <label for="" id="labelTelefono" class="labelText"></label> 
+            <input type="number" min="0" name="telefono" id="telefonoPaciente" placeholder="Telefono">
+          </div>
+          <div class="col s6 m6">
+            <label for="" id="labelEmail" class="labelText"></label>
+            <input type="email" name="email" id="emailPaciente" placeholder="Email">
+          </div>
+          <div class="col s6">
+            <?php 
+              $dataGeneros = selectGeners();
+
+              if(count($dataGeneros)>0){
+                echo "<label for='genero' class='labelText'>Genero</label>";
+                echo "<select name='genero' id='generoPaciente'>";
+                echo "<option value=''>Seleccione un genero</option>";
+                foreach ($dataGeneros as $key => $value) {
+                  echo "<option value='".$value['genero']."'>".$value['nombreGenero']."</option>";
+                }
+                echo "</select>";
+              }
+            
+            ?>
+            
+          </div>
+
+          <div class="col s12 center-align">
+            <input type="button" value="Guardar" class=" btn waves-effect waves-light" id="btnSavePaciente">
+          </div>
+          </form>
     </div>
 
 </div>

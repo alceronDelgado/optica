@@ -54,10 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             
         }else{
-            echo "error";
+            echo json_encode(["error" => "Credenciales de acceso incorrectas."]);
+            exit;
         }
     }else{
-        echo json_encode(["error" => "datos incorrectos"]);
+        echo json_encode(["error" => "Credenciales de acceso incorrectas."]);
+        exit;
     }
 
     exit;

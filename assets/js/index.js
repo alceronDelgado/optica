@@ -24,8 +24,6 @@ $(document).ready(function(){
         let documento = $('#usu_docum').val();
         let password = $('#usu_clave').val();
 
-        console.log(rol, documento, password);
-
         $.ajax({
             type: "POST",
             url: "src/querys/login.php",
@@ -37,12 +35,11 @@ $(document).ready(function(){
             },
             dataType: "json",
             success: function (info) {
-                console.log(usu_docum, usu_clave, rol_id);
                 if (info.success) {
 
                     Swal.fire({
                         "title": info.success,
-                        "text": info.usuario,
+                        "text": "Bienvenido Sr "+info.usuario,
                         "icon": 'success',
                         "showConfirmButton": false,
                         "timer":2500
@@ -52,17 +49,18 @@ $(document).ready(function(){
                         Swal.close();
                         window.location.href = 'src/dashboard.php';
                     }, 2500);
-                }else{
+                }else if(info.error){
+                    console.log(info.error);
                     
                     Swal.fire({
-                        "title": 'Error',
+                        "title": info.error,
                         "text" : info.error,
                         "icon" : 'error',
                         "showConfirmButton": false,
                         //Implementar html en el sweet Alert.
                         'html':`
                         <button type="submit" id="submit" class="btn waves-effect waves-light">Ok</button>`
-                    });
+                    })
 
                     //Evento click para cerrar el modal en caso de datos incorrectos.
                     $(document).on('click', '#submit', function() {

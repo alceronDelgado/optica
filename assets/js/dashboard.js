@@ -1,5 +1,4 @@
 $(document).ready( function () {
-
     let myTable = $('#myTable').DataTable({
       "pageLength": 5,  // Número de registros por página por defecto
       "lengthMenu": [ [5, 10, 15, -1], [5, 10, 15, "Todos"] ],  // Mostrar opciones de 5, 10, 15 registros
@@ -19,9 +18,37 @@ $(document).ready( function () {
     });
 
 
-    $('#btnAddPaciente').click(function() {
+    //Título de la tabla.
+  $('#titleUser').text('Pacientes');
+
+
+  $('#btnAddPaciente').click(function() {
       $("#myModal").fadeIn();
-      console.log('Modal abierto');
+      $('body').css('background-color', 'lightgray');
+
+      //Implementar texto desde jquery.
+      $('#modalTitle').text('Agregar Paciente');
+      $('#labelDocumento').text("Número de documento");
+      $('#labelNombre').text("Nombre");
+      $('#labelApellido').text("Apellido");
+      $('#labelDireccion').text("Dirección");
+      $('#labelTelefono').text("Teléfono");
+      $('#labelEmail').text("Email");
+      
+      $('.backgroundModal').css('background-color', '#26A69A');
+      $('.close').css('color', 'black');
+      $('#modalTitle').css('color', 'white');
   });
 
-} );
+
+  //Cerrar modal con la tecla escape(27)
+  $(document).keydown(function(e) {
+    if (e.keyCode == 27) {
+      $("#myModal").fadeOut();
+      $('body').css('background-color', 'white');
+
+    }
+  });
+
+
+});
