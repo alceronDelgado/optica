@@ -53,6 +53,26 @@ function selectGeners(){
     
 }
 
+function selectStratos(){
+    global $pdo;
+
+    $sql = "SELECT estr_id AS 'idEstratos', estr_nombre AS 'nombreEstrato' FROM estratos";
+
+    $selectEstratos = $pdo->prepare($sql);
+    $selectEstratos->execute();
+    $data = array();
+    if($selectEstratos->rowCount()>0){
+        while($row = $selectEstratos->fetch()){
+            $data[] = array(
+                'idEstratos' => $row['idEstratos'],
+                'nombreEstrato' => $row['nombreEstrato']
+            );
+        }
+    }
+
+    return $data;
+}
+
 
 
 

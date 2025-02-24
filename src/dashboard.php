@@ -25,8 +25,6 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
 </head>
 <body>
 
-
-
 <div class="row" id="spanId">
     <div class="col s3 offset-5">
         <span class="flow-text highlight">Bienvenido: 
@@ -37,7 +35,6 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
         </span>
     </div>
 </div>
-
 
 <div class="table">
     <h1 class="center-align" id="titleUser"></h1>
@@ -71,8 +68,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
         </tr>
       </tbody>
     </table>
-  </div>
-
+</div>
 
 <div id="menuDrop">
     <button id="btnAddPaciente">
@@ -92,19 +88,16 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           <h2 id="modalTitle"></h2>
         </div>
       </div>
-        <form action="" method="post">
+        <form action="" method="post" id="formPaciente">
           <div class="row">
-            
           <div class="col s6 m6">
             <label for="" id="labelDocumento" class="labelText"></label>
             <input type="number" name="documento" id="documentoPaciente" placeholder="Nro de documento">
           </div>
-
           <div class="col s6 m6">
             <label for="" id="labelNombre" class="labelText"></label>
             <input type="text" name="nombre" id="nombrePaciente" placeholder="Nombre">
           </div>
-
           <div class="col s6 m6">
             <label for="" id="labelApellido" class="labelText"></label>
             <input type="text" name="apellido" id="apellidoPaciente" placeholder="Apellido">
@@ -138,9 +131,32 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
             ?>
             
           </div>
+          <div class="col row s3">
+            <label for="radioEstrato" id="radioEstrato" class="labelText col s12 center-align" >Estrato:</label>
+          
+              <?php 
+                $dataEstratos = selectStratos();
+                $estratoDefault = 1; 
+
+                foreach ($dataEstratos as $estratosRow) { 
+                  // Verificar si el estrato actual es el seleccionado
+                  $checked = ($estratosRow['idEstratos'] == $estratoDefault) ? 'checked' : ''; 
+              ?>
+                
+                  <label>
+                    <input name="radioEstrato" type="radio" id="estrato" class="with-gap" value="<?php echo $estratosRow['idEstratos']; ?>" <?php echo $checked; ?>/>
+                    <span><?php echo $estratosRow['nombreEstrato']; ?></span>
+                  </label>
+                
+            <?php } ?>
+          </div>
+          <div class="col row s3">
+            <label for="labelHobbies" id="" class="labelText col s12 center-align" style="border: 2px solid black;">Hobbies:</label>
+
+          </div>
 
           <div class="col s12 center-align">
-            <input type="button" value="Guardar" class=" btn waves-effect waves-light" id="btnSavePaciente">
+            <input type="submit" value="Guardar" class=" btn waves-effect waves-light" id="btnSavePaciente">
           </div>
           </form>
     </div>

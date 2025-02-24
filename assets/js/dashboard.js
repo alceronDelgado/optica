@@ -50,5 +50,11 @@ $(document).ready( function () {
     }
   });
 
+  $('#formPaciente').submit(function(e) {
+    e.preventDefault();
+    console.log('Formulario enviado');
+    let radioEstrato = $('input[name="radioEstrato"]:checked').val();
+  });
+
 
 });
