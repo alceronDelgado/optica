@@ -25,4 +25,45 @@ function insertNewUser($clave,$nombre,$rol, $passwordInput){
 
 }
 
+function newPaciente($newData){
+    
+    $documentoPaciente = $newData['documentoPaciente'];
+    $nombrePaciente = $newData['nombrePaciente'];
+    $apellidoPaciente = $newData['apellidoPaciente'];
+    $dirreccionPaciente = $newData['dirreccionPaciente'];
+    $telefonoPaciente = $newData['telefonoPaciente'];
+    $emailPaciente = $newData['emailPaciente'];
+    $generoPaciente = $newData['generoPaciente'];
+    $estratoPaciente = $newData['estratoPaciente'];
+
+    //Esto es un arreglo.
+    //TODO: buscar como insertar los arreglos en el sql en la tabla pacientes_hobbies.
+    $hobbiesPaciente = $newData['hobbiesPaciente'];
+
+
+    global $pdo;
+
+
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $codigoInsert = $_POST['codigoInsert'];
+    $data = $_POST['data'];
+    //Decodifico el json y paso el valor de true para que me devuelva un array asociativo.
+    $newData = json_decode($data,true);
+    
+    switch ($codigoInsert) {
+        case 1:
+            
+            //La idea de esto es guardarlo en una variable y retornarlo para enviarlo al success del ajax.
+            newPaciente($newData);
+            break;
+        
+        default:
+            # code...
+            break;
+    }
+}
+
 ?>

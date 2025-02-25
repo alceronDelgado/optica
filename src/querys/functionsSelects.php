@@ -73,7 +73,26 @@ function selectStratos(){
     return $data;
 }
 
+function selectHobbies(){
 
+    global $pdo;
+
+    $sql = "SELECT hob_id as 'idHobbie', hob_nombre as 'nombreHobbie' FROM hobbies";
+    $exe = $pdo->prepare($sql);
+    $exe->execute();
+
+    $data = array();
+    if($exe->rowCount()>0){
+        while($row = $exe->fetch()){
+            $data[] = array(
+                'idHobbie' => $row['idHobbie'],
+                'nombreHobbie' => $row['nombreHobbie']
+            );
+        }
+    }
+
+    return $data;
+}
 
 
 ?>

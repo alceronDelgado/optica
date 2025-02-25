@@ -104,7 +104,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           </div>
           <div class="col s6 m6">
             <label for="" id="labelDireccion" class="labelText"></label>
-            <input type="text" name="direccion" id="apellidoPaciente" placeholder="direccion">
+            <input type="text" name="direccion" id="dirreccionPaciente" placeholder="direccion">
           </div>
           <div class="col s6 m6">
             <label for="" id="labelTelefono" class="labelText"></label> 
@@ -114,23 +114,8 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
             <label for="" id="labelEmail" class="labelText"></label>
             <input type="email" name="email" id="emailPaciente" placeholder="Email">
           </div>
-          <div class="col s6">
-            <?php 
-              $dataGeneros = selectGeners();
-
-              if(count($dataGeneros)>0){
-                echo "<label for='genero' class='labelText'>Genero</label>";
-                echo "<select name='genero' id='generoPaciente'>";
-                echo "<option value=''>Seleccione un genero</option>";
-                foreach ($dataGeneros as $key => $value) {
-                  echo "<option value='".$value['genero']."'>".$value['nombreGenero']."</option>";
-                }
-                echo "</select>";
-              }
-            
-            ?>
-            
-          </div>
+          
+          <!-- Estratos -->
           <div class="col row s3">
             <label for="radioEstrato" id="radioEstrato" class="labelText col s12 center-align" >Estrato:</label>
           
@@ -150,9 +135,43 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
                 
             <?php } ?>
           </div>
+          <!-- Genero -->
+          <div class="col s6">
+          <label for='' class='labelText'>Genero</label>
+          <select name='genero' id='generoPaciente'>
+            <option value='0'>Seleccione un genero</option>
+            <?php 
+              $dataGeneros = selectGeners();
+              foreach ($dataGeneros as $generosRow) {
+            ?>
+              <option name="genero" value="<?php echo $generosRow['genero'] ?>" id="generoPaciente">
+                <?php echo $generosRow['nombreGenero']; ?>
+              </option>
+            <?php  } ?>
+          </select>
+            
+            
+          </div>
+          <!-- Hobbies -->
           <div class="col row s3">
             <label for="labelHobbies" id="" class="labelText col s12 center-align" style="border: 2px solid black;">Hobbies:</label>
+            <?php 
+              $dataHobbies = selectHobbies();
+              $defaultHobbies = 1;
+              foreach ($dataHobbies as $rowHobbies) { 
+                
+                $checked = ($defaultHobbies == $rowHobbies['idHobbie']) ? 'checked' : '';
+                
+            ?>
+              <label for="<?php echo $rowHobbies['idHobbie']; ?>" class="col s12">
+                <input type="checkbox" class="filled-in" value="<?php echo $rowHobbies['idHobbie']; ?>" id="<?php echo $rowHobbies['idHobbie']; ?>" name="hobbies" />
+                <span>
+                  <?php echo $rowHobbies['nombreHobbie']; ?>
+                </span>
+              </label>
 
+            <?php } ?>
+            
           </div>
 
           <div class="col s12 center-align">

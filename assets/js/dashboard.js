@@ -52,8 +52,76 @@ $(document).ready( function () {
 
   $('#formPaciente').submit(function(e) {
     e.preventDefault();
-    console.log('Formulario enviado');
+
+
+    //En esta variable se almacena solo el valor del estrato seleccionado en base a si esta checked o no.
     let radioEstrato = $('input[name="radioEstrato"]:checked').val();
+
+    //En la variable genero valido mediate option y no input ya que un select maneja options.
+    let genero = $('option[name="genero"]:checked').val();
+
+    //En la variable hobbies se almacena los checkbox seleccionados.
+    let hobbies = $('input[name="hobbies"]:checked').map(function() {
+      return this.value;
+    }).get();
+
+    //Capturar valores
+    let documentoPaciente = $('#documentoPaciente').val();
+    let nombrePaciente = $('#nombrePaciente').val();
+    let apellidoPaciente = $('#apellidoPaciente').val();
+    let dirreccionPaciente  = $('#dirreccionPaciente').val();
+    let telefonoPaciente = $('#telefonoPaciente').val();
+    let emailPaciente = $('#emailPaciente').val();
+    let estratoPaciente = radioEstrato;
+    let hobbiesPaciente = hobbies;
+    let generoPaciente = genero;
+    let codigoInsert = 1;
+
+    
+    const data = {
+      documentoPaciente,
+      nombrePaciente,
+      apellidoPaciente,
+      dirreccionPaciente,
+      telefonoPaciente,
+      emailPaciente,
+      generoPaciente,
+      estratoPaciente,
+      hobbiesPaciente,
+      
+    }
+
+    const dataJson = JSON.stringify(data);
+
+    Swal.fire({
+      title:'¿Estás seguro de agregar este paciente?',
+      showDenyButton:true,
+      showCancelButton:true,
+      confirmButtonText:'Si',
+      denyButtonText:'No',
+      cancelButtonText:'Cancelar',
+      
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: "querys/functionsInsert.php",
+          data: {data:dataJson,codigoInsert:codigoInsert},
+          dataType: "dataType",
+          success: function (info) {
+            console.log(info);
+            
+          }
+        });
+      }
+    }).catch((err) => {
+      
+    });
+
+    
+
+
   });
 
 
