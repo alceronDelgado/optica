@@ -35,6 +35,7 @@ $(document).ready(function(){
             },
             dataType: "json",
             success: function (info) {
+                console.log(info);
                 if (info.success) {
 
                     Swal.fire({
@@ -60,7 +61,7 @@ $(document).ready(function(){
                         //Implementar html en el sweet Alert.
                         'html':`
                         <button type="submit" id="submit" class="btn waves-effect waves-light">Ok</button>`
-                    })
+                    });
 
                     //Evento click para cerrar el modal en caso de datos incorrectos.
                     $(document).on('click', '#submit', function() {
@@ -69,6 +70,7 @@ $(document).ready(function(){
                 }
             },
             error: function(error,xhr){
+                console.log(xhr);
                 Swal.fire(
                   'heading',
                   'Erorr al ingresar '+xhr,

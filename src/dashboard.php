@@ -2,7 +2,7 @@
 
 session_start();
 include_once '../config/conn.php';
-include_once 'querys/functionsInsert.php';
+// include_once 'querys/functionsInsert.php';
 include_once 'querys/functionsSelects.php';
 
 if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['rolNombre'])){
@@ -38,34 +38,18 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
 
 <div class="table">
     <h1 class="center-align" id="titleUser"></h1>
-    <table class="responsive-table striped highlight bordered" id="myTable">
-      <thead>
+    <table class="responsive-table striped highlight bordered" id="tabla">
+    <thead>
         <tr>
-          <th>Nombre</th>
-          <th>Email</th>
-          <th>Rol</th>
-          <th>Acciones</th>
+            <th>documento</th>
+            <th>nombrePaciente</th>
+            <th>apellidoPaciente</th>
+            <th>estrato</th>
+            <th>Acciones</th>
         </tr>
-      </thead>
+    </thead>
       <tbody>
-        <tr>
-          <td>Juan Pérez</td>
-          <td>juan@ejemplo.com</td>
-          <td>Admin</td>
-          <td><a href="#" class="btn waves-effect waves-light">Editar</a></td>
-        </tr>
-        <tr>
-          <td>Ana García</td>
-          <td>ana@ejemplo.com</td>
-          <td>Usuario</td>
-          <td><a href="#" class="btn waves-effect waves-light">Editar</a></td>
-        </tr>
-        <tr>
-          <td>Carlos López</td>
-          <td>carlos@ejemplo.com</td>
-          <td>Usuario</td>
-          <td><a href="#" class="btn waves-effect waves-light">Editar</a></td>
-        </tr>
+        <!-- render por ajax. -->
       </tbody>
     </table>
 </div>

@@ -1,5 +1,6 @@
 <?php 
 
+require_once '../../config/conn.php';
 
 function insertNewUser($clave,$nombre,$rol, $passwordInput){
     global $pdo;
@@ -26,7 +27,8 @@ function insertNewUser($clave,$nombre,$rol, $passwordInput){
 }
 
 function newPaciente($newData){
-    
+
+    global $pdo;
     $documentoPaciente = $newData['documentoPaciente'];
     $nombrePaciente = $newData['nombrePaciente'];
     $apellidoPaciente = $newData['apellidoPaciente'];
@@ -40,9 +42,27 @@ function newPaciente($newData){
     //TODO: buscar como insertar los arreglos en el sql en la tabla pacientes_hobbies.
     $hobbiesPaciente = $newData['hobbiesPaciente'];
 
+    
 
-    global $pdo;
+    $sql = "INSERT INTO paciente (pac_docum,pac_nombre,pac_apellido,pac_direccion,pac_telefono,pac_email,gen_id,estr_id) VALUES (:pac_docum,:pac_nombre,:pac_apellido,:pac_direccion,:pac_telefono,:pac_email,:gen_id,:estr_id)";
 
+    $insertNewPacient = $pdo->prepare($sql);
+
+    $insertNewPacient->bindParam(':pac_docum',$documentoPaciente,PDO::PARAM_INT);
+    $insertNewPacient->bindParam(':pac_nombre',$nombrePaciente);
+    $insertNewPacient->bindParam(':pac_apellido',$apellidoPaciente);
+    $insertNewPacient->bindParam(':pac_direccion',$dirreccionPaciente);
+    $insertNewPacient->bindParam(':pac_telefono',$telefonoPaciente);
+    $insertNewPacient->bindParam(':pac_email',$emailPaciente);
+    $insertNewPacient->bindParam(':gen_id',$generoPaciente);
+    $insertNewPacient->bindParam(':estr_id',$estratoPaciente);
+
+
+    if ($insertNewPacient->execute()) {
+        $paciente = json_encode(["success" => "Registro exitoso"]);
+        
+    }
+    return $paciente;
 
 }
 
@@ -50,18 +70,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $codigoInsert = $_POST['codigoInsert'];
     $data = $_POST['data'];
-    //Decodifico el json y paso el valor de true para que me devuelva un array asociativo.
     $newData = json_decode($data,true);
     
     switch ($codigoInsert) {
         case 1:
             
             //La idea de esto es guardarlo en una variable y retornarlo para enviarlo al success del ajax.
-            newPaciente($newData);
+            $data = newPaciente($newData);
+            echo json_encode(["success" => "Registro exitoso","data" => $data]);
             break;
-        
+            
         default:
-            # code...
+            echo "error";
             break;
     }
 }

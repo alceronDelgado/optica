@@ -3,7 +3,7 @@
 //Inicio sesión para crear el usuario y validarlo. 
 session_start();
 require_once '../../config/conn.php';
-require_once 'functionsInsert.php';
+// require_once 'functionsInsert.php';
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $clave = $_POST['usu_docum'];
     $passwordInput = $_POST['usu_clave'];
     $rol = $_POST['rol_id'];
-    $nombre = "Jhon doe";
+    //$nombre = "Jhon doe";
 
     //$sql = "SELECT * FROM usuarios WHERE usu_docum = :usu_docum";
 
@@ -48,13 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['rolNombre'] = $nombreRol;
 
                 $data = ["success" => "Bienvenido", "usuario" => $userNombre, "rol" => $rolUser, "rolNombre" => $nombreRol];
-                echo json_encode($data);
+                echo json_encode($data,JSON_PRETTY_PRINT);
     
             }
 
             
         }else{
-            echo json_encode(["error" => "Credenciales de acceso incorrectas."]);
+            echo json_encode(["error" => "Credenciales de acceso incorrectas.1"]);
             exit;
         }
     }else{
