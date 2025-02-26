@@ -55,11 +55,13 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
 </div>
 
 <div id="menuDrop">
-    <button id="btnAddPaciente">
-        <i class="large material-icons">group_add</i>
-    </button>
+    <a href="" id="btnAddPaciente">
+      <i class="large material-icons">group_add</i>
+    </a>
     <i class="large material-icons">group_add</i>
-    <i class="large material-icons">group_add</i>
+    <a href="">
+      <i class="large material-icons" id="close">close</i>
+    </a>
 </div>
 
 <div class="modal" id="myModal">
@@ -88,7 +90,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           </div>
           <div class="col s6 m6">
             <label for="" id="labelDireccion" class="labelText"></label>
-            <input type="text" name="direccion" id="dirreccionPaciente" placeholder="direccion">
+            <input type="text" name="direccion" id="direccionPaciente" placeholder="direccion">
           </div>
           <div class="col s6 m6">
             <label for="" id="labelTelefono" class="labelText"></label> 
@@ -101,7 +103,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           
           <!-- Estratos -->
           <div class="col row s3">
-            <label for="radioEstrato" id="radioEstrato" class="labelText col s12 center-align" >Estrato:</label>
+            <label for="" id="radioEstrato" class="labelText col s12 center-align" >Estrato:</label>
           
               <?php 
                 $dataEstratos = selectStratos();
@@ -138,7 +140,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           </div>
           <!-- Hobbies -->
           <div class="col row s3">
-            <label for="labelHobbies" id="" class="labelText col s12 center-align" style="border: 2px solid black;">Hobbies:</label>
+            <label for="labelHobbies" id="" class="labelText col s12 center-align">Hobbies:</label>
             <?php 
               $dataHobbies = selectHobbies();
               $defaultHobbies = 1;

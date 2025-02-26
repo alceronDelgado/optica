@@ -114,10 +114,9 @@ $(document).ready( function () {
                   return `
                       <div class="text-center">
                           <div class="btn-group" role="group" aria-label="Button group">
-                              <button id="btnDetalle" class="btn btn-info" type="button">Detalle</button>
-                              <button id="btnEditar" class="btn btn-primary editbtn" type="button">Editar</button>
+                              <button id="btnDetalle" class="btn btn-info" type="button">Ver Historia</button>
+                              <button id="btnEditar" class="btn btn-primary" type="button">Editar</button>
                               <button id="btnEliminar" data-id="${info.documento}" class="btn btn-danger eliminarbtn" type="button">Eliminar</button>
-                              <button id="btnAdd" data-id="${info.documento}" class="btn" style="background-color: yellow; color: white" type="button">Añadir</button>
                           </div>
                       </div>`;
               }
@@ -129,7 +128,44 @@ $(document).ready( function () {
     $('#titleUser').text('Pacientes');
 
 
-  $('#btnAddPaciente').click(function() {
+    
+
+  //Editar datos del paciente
+  $(document).on('click','#btnEditar', function (){
+    //let row = $(this).closest('tr').find('td:eq(0)').text();
+    let row = $(this).closest('tr');
+    let data = myTable.row(row).data();
+
+
+    //Mostrar modal
+    $("#myModal").fadeIn();
+    $('#documentoPaciente').val(data.documento);
+    $('#nombrePaciente').val(data.nombrePaciente);
+    $('#apellidoPaciente').val(data.apellidoPaciente);
+    $('#direccionPaciente').val(data.direccionPaciente);
+    $('#telefonoPaciente').val(data.telefonoPaciente);
+    $('#emailPaciente').val(data.emailPaciente);
+    estrato = parseInt(data.estrato);
+
+
+
+    //Estrato
+    $('input[name="radioEstrato"]').each(function (){
+      if(parseInt($(this).val()) === estrato){
+        $(this).prop('checked',true);
+        
+      }
+    });
+
+    //Genero
+
+
+  });
+
+
+  //Mostrar modal de registro
+  $('#btnAddPaciente').on('click',function(g) {
+    g.preventDefault();
       $("#myModal").fadeIn();
       $('body').css('background-color', 'lightgray');
 
@@ -148,15 +184,7 @@ $(document).ready( function () {
   });
 
 
-  //Cerrar modal con la tecla escape(27)
-  $(document).keydown(function(e) {
-    if (e.keyCode == 27) {
-      $("#myModal").fadeOut();
-      $('body').css('background-color', 'white');
-
-    }
-  });
-
+  //Registrar paciente
   $('#formPaciente').submit(function(e) {
     e.preventDefault();
 
@@ -232,10 +260,78 @@ $(document).ready( function () {
       
     });
 
+
+    //Editar datos de paciente
+    $('#btnEdit').on('click',function(f){
+      f.preventDefault();
+
+    });
+
     
 
 
   });
+
+  //Cerrar sesión
+  $('#close').on('click',function(f){
+    f.preventDefault();
+    
+    Swal.fire({
+      title:"¿Deseas salir de la aplicación?",
+      draggable: true,
+      icon:'info',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Si",
+      denyButtonText: `No`
+    }).then((result) =>{
+      if(result.isConfirmed){
+
+        Swal.fire({
+          title: 'Cerrando sesión...',
+          text: 'Por favor espera mientras se cierra tu sesión.',
+          icon: 'info',
+          showConfirmButton: false,
+          willOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        $.ajax({
+          url:'querys/sessionDestroy.php',
+          type:'POST',
+          success: function(data){
+            if(data){
+
+              Swal.fire({
+                title: '¡Hasta luego!',
+                text: 'Has cerrado sesión exitosamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              }).then(() => {
+                window.location.replace("../index.php"); 
+              });
+            }
+            
+          }
+
+        });
+      }else if(result.isDenied){
+        Swal.close();
+      }
+
+    });
+
+  });
+
+    //Cerrar modal con la tecla escape(27)
+    $(document).keydown(function(e) {
+      if (e.keyCode == 27) {
+        $("#myModal").fadeOut();
+        $('body').css('background-color', 'white');
+  
+      }
+    });
 
 
 });

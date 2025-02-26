@@ -70,7 +70,6 @@ body,html{
     width: 50%; 
     background-color: var(--background); 
     padding: 1rem;
-    border: 1px solid black;
 }
 
 /* Modal */
