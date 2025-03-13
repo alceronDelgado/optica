@@ -68,7 +68,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
     <div class="modal-content">
       <div class="row backgroundModal">
         <div class="col s1">
-          <span class="close">&times;</span>
+          <a href="#"><span id="closeModal">&times;</span></a>
         </div>
         <div class="col s11 center-align " id="">
           <h2 id="modalTitle"></h2>
