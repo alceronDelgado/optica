@@ -239,11 +239,8 @@ $(document).ready( function () {
 
       //Extraigo los ids y nombres del hobbie que contiene el usuario.
       let dataIdEstrato = parseInt(data.idEstrato);
-      let dataEstrato = data.estrato;
       let dataIdGenero = data.idGenero;
-
-
-      
+      let dataGeneroNmbr = data.genero;
 
 
       $('#documentoPaciente').val(data.documento);
@@ -266,26 +263,18 @@ $(document).ready( function () {
       });
 
       //Genero
-      $('#generoPaciente').find('option').each(function () {
+      $('#pacienteGeneroSelect').find('option').each(function () {
         let valueGenero = $(this).val();  // Obtiene el valor de la opción
-    
-        console.log('value del genero Formulario:', valueGenero);
-    
+
         // Si el valor de la opción coincide con el valor de dataIdGenero
-        if (valueGenero === dataIdGenero) {
+        if ($(this).val() === dataIdGenero) {
           console.log('dentro del if.');
-            $(this).prop('selected', true); // Marca esta opción como seleccionada (aunque esto puede no reflejarse bien)
+            //$(this).prop('selected', true); 
+            $("#pacienteGeneroSelect option[value="+ dataIdGenero +"]").attr("selected",true);
+            //console.log($(this).prop('selected', true));
+
         }
-    });
-    
-    // Lo recomendable es usar .val() directamente en el select para seleccionar la opción
-    $('#generoPaciente').val(dataIdGenero);  // Esto asegurará que la opción correspondiente se seleccione visualmente
-
-
-
-
-
-      
+      });
 
   });
 

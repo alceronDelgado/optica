@@ -123,14 +123,14 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           </div>
           <!-- Genero -->
           <div class="col s6">
-          <label for='' class='labelText'>Genero</label>
-          <select name='genero' id='generoPaciente'>
-            <option value='0'>Seleccione un genero</option>
+          <label for='pacienteGeneroSelect' class='labelText'>Genero</label>
+          <select name='genero' id='pacienteGeneroSelect'>
+            <!-- <option value='0'>Seleccione un genero</option> -->
             <?php 
               $dataGeneros = selectGeners();
               foreach ($dataGeneros as $generosRow) {
             ?>
-              <option name="" value="<?php echo $generosRow['genero'] ?>" id="">
+              <option name="" class="generos" value="<?php echo $generosRow['genero'] ?>">
                 <?php echo $generosRow['nombreGenero']; ?>
               </option>
             <?php  } ?>
