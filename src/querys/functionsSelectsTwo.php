@@ -12,8 +12,11 @@ function selectPacientes(){
         pac.pac_direccion AS 'direccionPaciente',
         pac.pac_telefono AS 'telefonoPaciente',
         pac.pac_email AS 'emailPaciente',
+       	es.estr_id AS 'idEstrato',
         es.estr_nombre AS 'estrato',
         g.gen_nombre AS 'genero',
+        g.gen_id AS 'idGenero',
+        GROUP_CONCAT(h.hob_id SEPARATOR ', ') AS 'idHobbies',
         GROUP_CONCAT(h.hob_nombre SEPARATOR ', ') AS 'hobbies'
         FROM paciente pac 
         INNER JOIN estratos es ON es.estr_id = pac.estr_id 
@@ -37,9 +40,13 @@ function selectPacientes(){
                     'direccionPaciente' => $row['direccionPaciente'],
                     'telefonoPaciente' => $row['telefonoPaciente'],
                     'emailPaciente' => $row['emailPaciente'],
+                    'idEstrato' => $row['idEstrato'],
                     'estrato' => $row['estrato'],
                     'genero' => $row['genero'],
+                    'idGenero' => $row['idGenero'],
+                    'idHobbies' => $row['idHobbies'], 
                     'hobbies' => $row['hobbies']
+                    
                 );
             }
 

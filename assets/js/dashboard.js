@@ -61,12 +61,16 @@ $(document).ready( function () {
   let modalTitle = $('#modalTitle');
   let backGroundColorPrimary = $('body').css('background-color');
   let closeBtn = $('#closeModal');
+  console.log(closeBtn);
   let backGroundModal;
   let labelsForm = {};
+  let form = $('#formPaciente');
 
   function closeModal(modal){
     modal.fadeOut();
     $('body').css('background-color',backGroundColorPrimary);
+    //Reinicio el modal para que cuando presione el botón de agregar modal se limpien los registros.
+    form[0].reset();
   }
   function openModal(modal){
     modal.fadeIn();
@@ -83,8 +87,7 @@ $(document).ready( function () {
   }
 
   //Función para enviar las propiedades específicas del modal.
-  function modalPropertyes(labelsForm,modalTitle,backGroundColorPrimary,closeBtn,backGroundModal){
-    console.log('hello world');
+  function modalPropertyes(labelsForm,modalTitle,closeBtn,backGroundModal){
 
     modalTitle.text(labelsForm.title);
     $('#labelDocumento').text(labelsForm.labelDocumento);
@@ -94,21 +97,8 @@ $(document).ready( function () {
     $('#labelTelefono').text(labelsForm.labelTelefono);
     $('#labelEmail').text(labelsForm.labelEmail);
     closeBtn.css('color', 'black');
-    $('.backgroundModal').css('background-color', backGroundModal);
+    $('.backgroundModal').css('color', backGroundModal);
     
-
-
-    //Implementar texto desde jquery.
-    // $('#modalTitle').text('Agregar Paciente');
-    // $('#labelDocumento').text("Número de documento");
-    // $('#labelNombre').text("Nombre");
-    // $('#labelApellido').text("Apellido");
-    // $('#labelDireccion').text("Dirección");
-    // $('#labelTelefono').text("Teléfono");
-    // $('#labelEmail').text("Email");
-    
-    // $('.close').css('color', 'black');
-    // $('#modalTitle').css('color', 'white');
   }
 
   closeBtn.on('click', function(e) {
@@ -175,7 +165,6 @@ $(document).ready( function () {
         generoPaciente,
         estratoPaciente,
         hobbiesPaciente,
-        
       }
   
       const dataJson = JSON.stringify(data);
@@ -219,44 +208,86 @@ $(document).ready( function () {
       
   });
 
-
-  //Capturar datos.
-  $('#btnEdit').on('click',function(f){
-    f.preventDefault();
-    openModal(modal);
-    console.log('hello world')
-
-  });
-
-    //Editar datos del paciente
-    $(document).on('click','#btnEditar', function (){
-      //let row = $(this).closest('tr').find('td:eq(0)').text();
+    //Capturar datos del paciente.
+  $(document).on('click','#btnEditar', function (){
       let row = $(this).closest('tr');
       let data = myTable.row(row).data();
-      console.log(data.emailPaciente);
+      let radioButtonNombres;
+      let radioButtonIds = [];
+      
+      openModal(modal);
+    
+      backGroundModal = '#2bbbad';
+      labelsForm = {
+        title: 'Editar paciente',
+        labelDocumento: 'Número de documento',
+        labelNombre: 'Nombre',
+        labelApellido: 'Apellido',
+        labelDireccion: 'Dirección',
+        labelTelefono: 'Teléfono',
+        labelEmail: 'Email',
   
+      };
+
+      console.log(data);
+  
+      modalPropertyes(labelsForm,modalTitle,closeBtn,backGroundModal);
+
       //Mostrar modal
-      $("#myModal").fadeIn();
+      openModal(modal);
+
+
+      //Extraigo los ids y nombres del hobbie que contiene el usuario.
+      let dataIdEstrato = parseInt(data.idEstrato);
+      let dataEstrato = data.estrato;
+      let dataIdGenero = data.idGenero;
+
+
+      
+
+
       $('#documentoPaciente').val(data.documento);
       $('#nombrePaciente').val(data.nombrePaciente);
       $('#apellidoPaciente').val(data.apellidoPaciente);
       $('#direccionPaciente').val(data.direccionPaciente);
       $('#telefonoPaciente').val(data.telefonoPaciente);
       $('#emailPaciente').val(data.emailPaciente);
-      estrato = parseInt(data.estrato);
   
       //Estrato
-      $('input[name="radioEstrato"]').each(function (){
-        if(parseInt($(this).val()) === estrato){
-          $(this).prop('checked',true);
-          
+      $('input[name="radioEstrato"]').each(function () {
+        //Valor del radio Button actual, por defecto es el 1.
+        let radioButtonValue = $(this).val();  
+        
+        // Comparo el valor del radio button del formulario con el del paciente.
+        if (parseInt(radioButtonValue) === dataIdEstrato) { 
+          //Selecciono el radio button.
+          $(this).prop('checked', true); 
         }
       });
-  
+
       //Genero
-  
-  
+      $('#generoPaciente').find('option').each(function () {
+        let valueGenero = $(this).val();  // Obtiene el valor de la opción
+    
+        console.log('value del genero Formulario:', valueGenero);
+    
+        // Si el valor de la opción coincide con el valor de dataIdGenero
+        if (valueGenero === dataIdGenero) {
+          console.log('dentro del if.');
+            $(this).prop('selected', true); // Marca esta opción como seleccionada (aunque esto puede no reflejarse bien)
+        }
     });
+    
+    // Lo recomendable es usar .val() directamente en el select para seleccionar la opción
+    $('#generoPaciente').val(dataIdGenero);  // Esto asegurará que la opción correspondiente se seleccione visualmente
+
+
+
+
+
+      
+
+  });
 
 
   //Cerrar sesión

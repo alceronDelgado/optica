@@ -115,8 +115,8 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
               ?>
                 
                   <label>
-                    <input name="radioEstrato" type="radio" id="estrato" class="with-gap" value="<?php echo $estratosRow['idEstratos']; ?>" <?php echo $checked; ?>/>
-                    <span><?php echo $estratosRow['nombreEstrato']; ?></span>
+                    <input name="radioEstrato" type="radio" id="" class="with-gap" value="<?php echo $estratosRow['idEstratos']; ?>" <?php echo $checked; ?>/>
+                    <span name="radioEstratoNombre"><?php echo $estratosRow['nombreEstrato']; ?></span>
                   </label>
                 
             <?php } ?>
@@ -130,7 +130,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
               $dataGeneros = selectGeners();
               foreach ($dataGeneros as $generosRow) {
             ?>
-              <option name="genero" value="<?php echo $generosRow['genero'] ?>" id="generoPaciente">
+              <option name="" value="<?php echo $generosRow['genero'] ?>" id="">
                 <?php echo $generosRow['nombreGenero']; ?>
               </option>
             <?php  } ?>
