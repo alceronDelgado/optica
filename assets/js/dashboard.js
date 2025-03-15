@@ -146,7 +146,7 @@ $(document).ready( function () {
       let radioEstrato = $('input[name="radioEstrato"]:checked').val();
   
       //En la variable genero valido mediate option y no input ya que un select maneja options.
-      let genero = $('option[name="genero"]:checked').val();
+      let genero = $('select[name="genero"]').val();
   
       //En la variable hobbies se almacena los checkbox seleccionados.
       let hobbies = $('input[name="hobbies"]:checked').map(function() {
@@ -181,21 +181,21 @@ $(document).ready( function () {
       const dataJson = JSON.stringify(data);
   
       Swal.fire({
-        title:'¿Estás seguro de agregar este paciente?',
-        showDenyButton:true,
-        showCancelButton:true,
-        confirmButtonText:'Si',
-        denyButtonText:'No',
-        cancelButtonText:'Cancelar',
-        
+        title: '¿Estás seguro de agregar este paciente?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        denyButtonText: 'No',
+        cancelButtonText: 'Cancelar',
       }).then((result) => {
-  
         if (result.isConfirmed) {
           $.ajax({
             type: "POST",
             url: "querys/functionsInsert.php",
-            data: {data:dataJson,
-              codigoInsert:codigoInsert},
+            data: {
+              data: dataJson,
+              codigoInsert: codigoInsert
+            },
             dataType: "json",
             success: function (data) {
               console.log(data.success);
@@ -203,30 +203,29 @@ $(document).ready( function () {
                 title: data.success,
                 icon: 'success',
                 confirmButtonText: 'Aceptar',
-                showCancelButton: false,
-                });
-                //Cierro Modal.
-                closeModal();
-                
+                showCancelButton: false
+              });
+              closeModal(modal);  
+              myTable.ajax.reload();
+              $('#formPaciente')[0].reset(); 
             }
           });
         }
       }).catch((err) => {
-        
+        console.error(err);
       });
   
-  
-      //Capturar datos.
-      $('#btnEdit').on('click',function(f){
-        f.preventDefault();
-        openModal(modal);
-        console.log('hello world')
-  
-      });
   
       
-  
-  
+  });
+
+
+  //Capturar datos.
+  $('#btnEdit').on('click',function(f){
+    f.preventDefault();
+    openModal(modal);
+    console.log('hello world')
+
   });
 
     //Editar datos del paciente

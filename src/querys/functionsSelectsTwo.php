@@ -5,7 +5,7 @@ require_once '../../config/conn.php';
 function selectPacientes(){
     global $pdo;
 
-    $sql = "SELECT 
+    $sql ="SELECT 
         pac.pac_docum AS 'documento',
         pac.pac_nombre AS 'nombrePaciente',
         pac.pac_apellido AS 'apellidoPaciente',
@@ -13,8 +13,14 @@ function selectPacientes(){
         pac.pac_telefono AS 'telefonoPaciente',
         pac.pac_email AS 'emailPaciente',
         es.estr_nombre AS 'estrato',
-        g.gen_nombre AS 'genero'
-        FROM paciente pac INNER JOIN estratos es ON es.estr_id = pac.estr_id INNER JOIN generos g ON g.gen_id = pac.gen_id";
+        g.gen_nombre AS 'genero',
+        GROUP_CONCAT(h.hob_nombre SEPARATOR ', ') AS 'hobbies'
+        FROM paciente pac 
+        INNER JOIN estratos es ON es.estr_id = pac.estr_id 
+        INNER JOIN generos g ON g.gen_id = pac.gen_id
+        INNER JOIN paciente_hobbies ph ON ph.pac_id = pac.pac_docum
+        INNER JOIN hobbies h ON ph.hob_id = h.hob_id
+        GROUP BY(pac.pac_docum)";
 
 
     $selectSql = $pdo->prepare($sql);
@@ -32,7 +38,8 @@ function selectPacientes(){
                     'telefonoPaciente' => $row['telefonoPaciente'],
                     'emailPaciente' => $row['emailPaciente'],
                     'estrato' => $row['estrato'],
-                    'genero' => $row['genero']
+                    'genero' => $row['genero'],
+                    'hobbies' => $row['hobbies']
                 );
             }
 

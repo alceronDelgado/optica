@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `estratos`
 --
 
-CREATE TABLE `estratos` (
+CREATE TABLE IF NOT EXISTS `estratos` (
   `estr_id` int(11) NOT NULL,
   `estr_nombre` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
