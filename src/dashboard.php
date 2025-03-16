@@ -125,7 +125,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           <div class="col s6">
           <label for='pacienteGeneroSelect' class='labelText'>Genero</label>
           <select name='genero' id='pacienteGeneroSelect'>
-            <!-- <option value='0'>Seleccione un genero</option> -->
+            <option value='0'>Seleccione un genero</option>
             <?php 
               $dataGeneros = selectGeners();
               foreach ($dataGeneros as $generosRow) {
@@ -160,16 +160,13 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
             
           </div>
 
-          <div class="col s12 center-align">
-            <input type="submit" value="Guardar" class=" btn waves-effect waves-light" id="btnSavePaciente">
+          <div class="col s12 center-align btnDiv">
+            <button type="submit" class="btn waves-effect waves-light" id="btnPaciente"></button>
           </div>
           </form>
     </div>
 
 </div>
-
-    
-
 
 <?php require_once '../assets/templates/imports.php'; ?>
 <script src="../assets/js/dashboard.js"></script>

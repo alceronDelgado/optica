@@ -1,4 +1,6 @@
 $(document).ready( function () {
+
+
     //Título de la tabla.
     let myTable = $('#tabla').DataTable({
       "pageLength": 5,  // Número de registros por página por defecto
@@ -61,9 +63,9 @@ $(document).ready( function () {
   let modalTitle = $('#modalTitle');
   let backGroundColorPrimary = $('body').css('background-color');
   let closeBtn = $('#closeModal');
-  console.log(closeBtn);
   let backGroundModal;
   let labelsForm = {};
+  let btn = $('.btnDiv #btnPaciente');
   let form = $('#formPaciente');
 
   function closeModal(modal){
@@ -87,18 +89,22 @@ $(document).ready( function () {
   }
 
   //Función para enviar las propiedades específicas del modal.
-  function modalPropertyes(labelsForm,modalTitle,closeBtn,backGroundModal){
-
-    modalTitle.text(labelsForm.title);
+  function modalPropertyes(labelsForm, modalTitle, btn, backGroundModal) {
+    console.log(labelsForm); 
+    console.log({"texto botón":labelsForm.textBtn});
+    modalTitle.text(labelsForm.title); 
     $('#labelDocumento').text(labelsForm.labelDocumento);
     $('#labelNombre').text(labelsForm.labelNombre);
     $('#labelApellido').text(labelsForm.labelApellido);
     $('#labelDireccion').text(labelsForm.labelDireccion);
     $('#labelTelefono').text(labelsForm.labelTelefono);
     $('#labelEmail').text(labelsForm.labelEmail);
-    closeBtn.css('color', 'black');
-    $('.backgroundModal').css('color', backGroundModal);
+
+    console.log(btn);
+    btn.text(labelsForm.textBtn)
+    // Aquí cambiamos el texto del botón usando `labelsForm.textBtn`
     
+    $('.backgroundModal').css('color', backGroundModal);
   }
 
   closeBtn.on('click', function(e) {
@@ -109,6 +115,7 @@ $(document).ready( function () {
   //Mostrar modal de registro
   $('#btnAddPaciente').on('click',function(g) {
     g.preventDefault();
+    g.stopPropagation();
     openModal(modal);
     modalKeydown();
     backGroundModal = '#26A69A';
@@ -120,17 +127,18 @@ $(document).ready( function () {
       labelDireccion: 'Dirección',
       labelTelefono: 'Teléfono',
       labelEmail: 'Email',
-
-    };
+      textBtn: 'Registrar'
+  };
 
     //Aplico propiedades específicas al modal.
-    modalPropertyes(labelsForm,modalTitle,backGroundColorPrimary,closeBtn,backGroundModal);
+    modalPropertyes(labelsForm, modalTitle, btn, backGroundModal);
 
   });
 
     //Registrar paciente
   $('#formPaciente').submit(function(e) {
       e.preventDefault();
+      e.stopPropagation();
   
       //En esta variable se almacena solo el valor del estrato seleccionado en base a si esta checked o no.
       let radioEstrato = $('input[name="radioEstrato"]:checked').val();
@@ -214,9 +222,12 @@ $(document).ready( function () {
       let data = myTable.row(row).data();
       let radioButtonNombres;
       let radioButtonIds = [];
+
+      //btn.text('Guardar cambios');
       
       openModal(modal);
-    
+      modalKeydown();
+      
       backGroundModal = '#2bbbad';
       labelsForm = {
         title: 'Editar paciente',
@@ -226,22 +237,15 @@ $(document).ready( function () {
         labelDireccion: 'Dirección',
         labelTelefono: 'Teléfono',
         labelEmail: 'Email',
-  
-      };
+        textBtn: 'Guardar Cambios'  
+    };
 
-      console.log(data);
-  
-      modalPropertyes(labelsForm,modalTitle,closeBtn,backGroundModal);
-
-      //Mostrar modal
-      openModal(modal);
-
+      modalPropertyes(labelsForm, modalTitle, btn, backGroundModal);
 
       //Extraigo los ids y nombres del hobbie que contiene el usuario.
       let dataIdEstrato = parseInt(data.idEstrato);
       let dataIdGenero = data.idGenero;
       let dataGeneroNmbr = data.genero;
-
 
       $('#documentoPaciente').val(data.documento);
       $('#nombrePaciente').val(data.nombrePaciente);
@@ -262,20 +266,30 @@ $(document).ready( function () {
         }
       });
 
-      //Genero
-      $('#pacienteGeneroSelect').find('option').each(function () {
-        let valueGenero = $(this).val();  // Obtiene el valor de la opción
+      //Genero TODO: POR ARREGLAR.
+      // $('#pacienteGeneroSelect').find('option').each(function () {
+      //   let valueGenero = $(this).val();  // Obtiene el valor de la opción
 
-        // Si el valor de la opción coincide con el valor de dataIdGenero
-        if ($(this).val() === dataIdGenero) {
-          console.log('dentro del if.');
-            //$(this).prop('selected', true); 
-            $("#pacienteGeneroSelect option[value="+ dataIdGenero +"]").attr("selected",true);
-            //console.log($(this).prop('selected', true));
+      //   // Si el valor de la opción coincide con el valor de dataIdGenero
+      //   if ($(this).val() === dataIdGenero) {
+      //     console.log('dentro del if.');
+      //       //$(this).prop('selected', true); 
+      //       $("#pacienteGeneroSelect option[value="+ dataIdGenero +"]").attr("selected",true);
+      //       //console.log($(this).prop('selected', true));
 
-        }
-      });
+      //   }
+      // });
 
+      //Opción generada por chatGpt
+      $('#pacienteGeneroSelect').val(data.idGenero);
+
+  });
+
+  $(document).on('click', '#btnPaciente', function (f){
+    f.preventDefault();
+
+    let dataEdit = $(this).serializeArray();
+    //console.log(dataEdit);
   });
 
 
