@@ -210,12 +210,16 @@ $(document).ready(function () {
     $("#pacienteGeneroSelect").val(data.idGenero);
   });
 
+  //Botón para enviar datos a php.
   $(document).on("click", "#btnPaciente", function (f) {
     f.preventDefault();
     f.stopPropagation();
 
-    let data = myTable.row(this).data();
-    console.log({"datos capturados":data});
+
+    let row = myTable.row($(this).closest('tr'));
+    let dataRow = row.data();
+
+    console.log({"datos capturados":dataRow});
 
     // Capturar datos del formulario
     let dataEdit = form.serializeArray();
@@ -226,12 +230,7 @@ $(document).ready(function () {
     if (editMode) {
       // Modo edición (actualización)
       console.log({ "modo edit": dataEdit });
-    } else {
-      console.log(dataRegister);
-      // Modo registro (insertar)
-
-
-    //Swal.fire({
+      //Swal.fire({
     //       title: '¿Estás seguro de agregar este paciente?',
     //       showDenyButton: true,
     //       showCancelButton: true,
@@ -265,6 +264,12 @@ $(document).ready(function () {
     //     }).catch((err) => {
     //       console.error(err);
     //     });
+    } else {
+      console.log(dataRegister);
+      // Modo registro (insertar)
+
+
+    
       Swal.fire({
         title: "¿Estás seguro de agregar este paciente?",
         showDenyButton: true,
@@ -321,9 +326,11 @@ $(document).ready(function () {
         });
     }
 
-    //Cerrar sesión
-    $("#close").on("click", function (f) {
-      f.preventDefault();
-    });
+    
+  });
+
+  //Cerrar sesión
+  $("#close").on("click", function (f) {
+    f.preventDefault();
   });
 });

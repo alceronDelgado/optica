@@ -118,17 +118,16 @@ function newPaciente($formData){
 
 }
 
-function updatePaciente($newDataArg){
+function updatePaciente($formData){
 
     global $pdo;
 
-    if (empty($newDataArg)) {
+    if (empty($formData)) {
         exit();
     }
 
-    $hello = $newDataArg;
 
-    return $hello;
+    return "";
 
 
 }
@@ -158,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         //Update
         case 2:
-            $data = updatePaciente($newDataArg);
+            $data = updatePaciente($formData);
             echo json_encode(["success" => "Registro exitoso","data" => $data]);
             break;
             
