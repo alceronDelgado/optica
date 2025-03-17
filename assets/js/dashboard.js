@@ -330,7 +330,54 @@ $(document).ready(function () {
   });
 
   //Cerrar sesión
-  $("#close").on("click", function (f) {
+  $('#close').on('click',function(f){
     f.preventDefault();
+    
+    Swal.fire({
+      title:"¿Deseas salir de la aplicación?",
+      draggable: true,
+      icon:'info',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Si",
+      denyButtonText: `No`
+    }).then((result) =>{
+      if(result.isConfirmed){
+
+        Swal.fire({
+          title: 'Cerrando sesión...',
+          text: 'Por favor espera mientras se cierra tu sesión.',
+          icon: 'info',
+          showConfirmButton: false,
+          willOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        $.ajax({
+          url:'querys/sessionDestroy.php',
+          type:'POST',
+          success: function(data){
+            if(data){
+
+              Swal.fire({
+                title: '¡Hasta luego!',
+                text: 'Has cerrado sesión exitosamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              }).then(() => {
+                window.location.replace("../index.php"); 
+              });
+            }
+            
+          }
+
+        });
+      }else if(result.isDenied){
+        Swal.close();
+      }
+
+    });
+
   });
 });
