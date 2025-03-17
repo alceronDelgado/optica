@@ -92,6 +92,4 @@ function selectStratos(){
     return $data;
 }
 
-
-
 ?>

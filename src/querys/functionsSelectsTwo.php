@@ -5,6 +5,7 @@ require_once '../../config/conn.php';
 function selectPacientes(){
     global $pdo;
 
+    //TODO: Mejorar consulta.
     $sql ="SELECT 
         pac.pac_docum AS 'documento',
         pac.pac_nombre AS 'nombrePaciente',
@@ -19,10 +20,10 @@ function selectPacientes(){
         GROUP_CONCAT(h.hob_id SEPARATOR ', ') AS 'idHobbies',
         GROUP_CONCAT(h.hob_nombre SEPARATOR ', ') AS 'hobbies'
         FROM paciente pac 
-        INNER JOIN estratos es ON es.estr_id = pac.estr_id 
-        INNER JOIN generos g ON g.gen_id = pac.gen_id
-        INNER JOIN paciente_hobbies ph ON ph.pac_id = pac.pac_docum
-        INNER JOIN hobbies h ON ph.hob_id = h.hob_id
+        LEFT JOIN estratos es ON es.estr_id = pac.estr_id 
+        LEFT JOIN generos g ON g.gen_id = pac.gen_id
+        LEFT JOIN paciente_hobbies ph ON ph.pac_id = pac.pac_docum
+        LEFT JOIN hobbies h ON ph.hob_id = h.hob_id
         GROUP BY(pac.pac_docum)";
 
 
@@ -69,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $dataSelect = selectPacientes();
             echo json_encode(["data"=>$dataSelect]);
             break;
+
         default:
             echo json_encode(array('error' => 'No se encontro el codigo'));
             break;

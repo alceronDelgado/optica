@@ -77,7 +77,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
         <form action="" method="post" id="formPaciente">
           <div class="row">
           <div class="col s6 m6">
-            <label for="" id="labelDocumento" class="labelText"></label>
+            <label for="documento" id="labelDocumento" class="labelText"></label>
             <input type="number" name="documento" id="documentoPaciente" placeholder="Nro de documento">
           </div>
           <div class="col s6 m6">
@@ -115,7 +115,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
               ?>
                 
                   <label>
-                    <input name="radioEstrato" type="radio" id="" class="with-gap" value="<?php echo $estratosRow['idEstratos']; ?>" <?php echo $checked; ?>/>
+                    <input name="estrato" type="radio" id="" class="with-gap" value="<?php echo $estratosRow['idEstratos']; ?>" <?php echo $checked; ?>/>
                     <span name="radioEstratoNombre"><?php echo $estratosRow['nombreEstrato']; ?></span>
                   </label>
                 
@@ -161,7 +161,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           </div>
 
           <div class="col s12 center-align btnDiv">
-            <button type="submit" class="btn waves-effect waves-light" id="btnPaciente"></button>
+            <button type="submit" class="btn pacBtn waves-effect waves-light" id="btnPaciente"></button>
           </div>
           </form>
     </div>
