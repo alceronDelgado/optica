@@ -265,11 +265,8 @@ $(document).ready(function () {
     //       console.error(err);
     //     });
     } else {
-      console.log(dataRegister);
       // Modo registro (insertar)
 
-
-    
       Swal.fire({
         title: "¿Estás seguro de agregar este paciente?",
         showDenyButton: true,
