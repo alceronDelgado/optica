@@ -143,11 +143,11 @@ $(document).ready(function () {
   //Capturar datos del paciente.
   $(document).on("click", "#btnEditar", function () {
     editMode = true; //Modo editar
-    console.log({ "mode update": editMode });
     let row = $(this).closest("tr");
     let data = myTable.row(row).data();
     let radioButtonNombres;
     let radioButtonIds = [];
+
 
     //btn.text('Guardar cambios');
 
@@ -168,10 +168,11 @@ $(document).ready(function () {
 
     modalPropertyes(labelsForm, modalTitle, btn, backGroundModal);
 
-    //Extraigo los ids y nombres del hobbie que contiene el usuario.
+    //Extraigo los ids y nombres del estrato que contiene el usuario.
     let dataIdEstrato = parseInt(data.idEstrato);
     let dataIdGenero = data.idGenero;
-    let dataGeneroNmbr = data.genero;
+    //
+    let dataIdHobbies = data.idHobbies ? Object.values(data.idHobbies) : [];
 
     $("#documentoPaciente").val(data.documento);
     $("#nombrePaciente").val(data.nombrePaciente);
@@ -181,7 +182,7 @@ $(document).ready(function () {
     $("#emailPaciente").val(data.emailPaciente);
 
     //Estrato
-    $('input[name="radioEstrato"]').each(function () {
+    $('input[name="estrato"]').each(function () {
       //Valor del radio Button actual, por defecto es el 1.
       let radioButtonValue = $(this).val();
 
@@ -191,6 +192,28 @@ $(document).ready(function () {
         $(this).prop("checked", true);
       }
     });
+
+    //Hobbies
+    $('input[name="hobbies"]').each(function (){
+      let checkboxButtonValue = $(this).val();
+      
+      if (dataIdHobbies.includes(checkboxButtonValue)) {
+        $(this).prop("checked", true);
+        
+      }
+    });
+
+
+    //Genero
+    let selectPaciente = $('select[name="genero"]');
+
+    let options = selectPaciente.find(`option[value="${dataIdGenero}"]`).length > 0;
+    if (options) {
+      console.log($(`option[value="${dataIdGenero}"]`).trigger('change'))
+      selectPaciente.val(dataIdGenero).trigger('change');
+    }
+
+
 
     //Genero TODO: POR ARREGLAR.
     // $('#pacienteGeneroSelect').find('option').each(function () {
@@ -207,7 +230,7 @@ $(document).ready(function () {
     // });
 
     //Opción generada por chatGpt
-    $("#pacienteGeneroSelect").val(data.idGenero);
+    //$("#pacienteGeneroSelect").val(data.idGenero);
   });
 
   //Botón para enviar datos a php.
@@ -274,8 +297,7 @@ $(document).ready(function () {
         confirmButtonText: "Sí",
         denyButtonText: "No",
         cancelButtonText: "Cancelar",
-      })
-        .then((result) => {
+      }).then((result) => {
           if (result.isConfirmed) {
             $.ajax({
               type: "POST",
