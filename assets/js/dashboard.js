@@ -66,6 +66,7 @@ $(document).ready(function () {
   let closeBtn = $("#closeModal");
   let backGroundModal;
   let labelsForm = {};
+  let lastData;
   let btn = $(".btnDiv #btnPaciente");
   let form = $("#formPaciente");
   //False para editar, true para registrar.
@@ -147,6 +148,7 @@ $(document).ready(function () {
     let data = myTable.row(row).data();
     let radioButtonNombres;
     let radioButtonIds = [];
+    lastData = data;
 
 
     //btn.text('Guardar cambios');
@@ -205,54 +207,80 @@ $(document).ready(function () {
 
 
     //Genero
-    let selectPaciente = $('select[name="genero"]');
+    // let selectPaciente = $('select[name="genero"]');
 
-    let options = selectPaciente.find(`option[value="${dataIdGenero}"]`).length > 0;
-    if (options) {
-      console.log($(`option[value="${dataIdGenero}"]`).trigger('change'))
-      selectPaciente.val(dataIdGenero).trigger('change');
-    }
+    // let options = selectPaciente.find(`option[value="${dataIdGenero}"]`).length > 0;
+    // if (options) {
+    //   console.log($(`option[value="${dataIdGenero}"]`).trigger('change'))
+    //   selectPaciente.val(dataIdGenero).trigger('change');
+    // }
 
 
 
     //Genero TODO: POR ARREGLAR.
-    // $('#pacienteGeneroSelect').find('option').each(function () {
-    //   let valueGenero = $(this).val();  // Obtiene el valor de la opción
+    $('#pacienteGeneroSelect').find('option').each(function () {
+      let valueGenero = $(this).val();  // Obtiene el valor de la opción
 
-    //   // Si el valor de la opción coincide con el valor de dataIdGenero
-    //   if ($(this).val() === dataIdGenero) {
-    //     console.log('dentro del if.');
-    //       //$(this).prop('selected', true);
-    //       $("#pacienteGeneroSelect option[value="+ dataIdGenero +"]").attr("selected",true);
-    //       //console.log($(this).prop('selected', true));
+      // Si el valor de la opción coincide con el valor de dataIdGenero
+      if ($(this).val() === dataIdGenero) {
+        console.log('dentro del if.');
+          //$(this).prop('selected', true);
+          //$("#pacienteGeneroSelect option[value="+ dataIdGenero +"]").attr("selected",true);
+          //console.log($(this).prop('selected', true));
 
-    //   }
-    // });
+      }
+    });
 
     //Opción generada por chatGpt
     //$("#pacienteGeneroSelect").val(data.idGenero);
   });
 
   //Botón para enviar datos a php.
-  $(document).on("click", "#btnPaciente", function (f) {
+  $(document).on("click", "#btnPaciente",lastData, function (f) {
     f.preventDefault();
     f.stopPropagation();
-
-
-    let row = myTable.row($(this).closest('tr'));
-    let dataRow = row.data();
-
-    console.log({"datos capturados":dataRow});
-
+    
     // Capturar datos del formulario
     let dataEdit = form.serializeArray();
     let dataRegister = JSON.stringify(dataEdit);
-    console.log(dataRegister);
 
     // Verificar si estamos en modo de edición
     if (editMode) {
+      
       // Modo edición (actualización)
       console.log({ "modo edit": dataEdit });
+      console.log({"Previo update": lastData});
+
+      Swal.fire({
+        title: "¿Deseas actualizar los datos?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Guardar",
+      }).then((result) =>{
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "querys/functionsInsert.php",
+            data: {
+              codigo:2,
+              data: dataRegister,
+              lastRow: lastData
+            },
+            dataType: "json",
+            success: function (response) {
+              console.log(response);
+            },
+            error: function (xhr,error){
+              throw new Error("Error en la consulta", xhr, error);
+              
+            }
+          });
+        }else{
+          console.log('cancelado');
+        }
+
+      })
+
       //Swal.fire({
     //       title: '¿Estás seguro de agregar este paciente?',
     //       showDenyButton: true,
@@ -289,7 +317,6 @@ $(document).ready(function () {
     //     });
     } else {
       // Modo registro (insertar)
-
       Swal.fire({
         title: "¿Estás seguro de agregar este paciente?",
         showDenyButton: true,

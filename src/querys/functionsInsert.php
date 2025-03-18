@@ -118,7 +118,7 @@ function newPaciente($formData){
 
 }
 
-function updatePaciente($formData){
+function updatePaciente($formData,$dataLastRow){
 
     global $pdo;
 
@@ -134,19 +134,29 @@ function updatePaciente($formData){
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $codigo = ($_POST['codigo'] == '1' || $_POST['codigo'] == '1') ? $_POST['codigo'] : null;
+    $codigo = ($_POST['codigo'] == '1' || $_POST['codigo'] == '2') ? $_POST['codigo'] : null;
     $data = $_POST['data'];
-    $newDataArg = json_decode($data,true);
 
     $formData = [];
+
+    if($codigo == '2'){
+        $data = $_POST['data'];
+        //Esta variable me captura los registros anteriores al update del paciente, en caso de que se daban comparar o si no hay ningun cambio, así evitamos ejecutar un update.
+        $dataLastRow = $_POST['lastRow'];
+        var_dump($dataLastRow);
+
+    }
+    
+    $newDataArg = json_decode($data,true);
 
     foreach ($newDataArg as $field) {
         $formData[$field['name']] = $field['value'];
     }
+    var_dump($formData);
 
     switch ($codigo) {
         //Insert
-        case "1":
+        case 1:
             
             $data = newPaciente($formData);
 
@@ -157,8 +167,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         //Update
         case 2:
-            $data = updatePaciente($formData);
-            echo json_encode(["success" => "Registro exitoso","data" => $data]);
+            $data = updatePaciente($formData,$dataLastRow);
+            //echo json_encode(["success" => "Registro exitoso","data" => $data]);
             break;
             
         default:

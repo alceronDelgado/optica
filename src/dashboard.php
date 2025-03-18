@@ -125,7 +125,7 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           <div class="col s6">
           <label for='pacienteGeneroSelect' class='labelText'>Genero</label>
           <select name='genero' id='pacienteGeneroSelect'>
-            <option value='0'>Seleccione un genero</option>
+            <!-- <option value='0'>Seleccione un genero</option> -->
             <?php 
               $dataGeneros = selectGeners();
               foreach ($dataGeneros as $generosRow) {
