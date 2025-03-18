@@ -246,10 +246,10 @@ $(document).ready(function () {
 
     // Verificar si estamos en modo de edición
     if (editMode) {
-      
-      // Modo edición (actualización)
-      console.log({ "modo edit": dataEdit });
-      console.log({"Previo update": lastData});
+
+      console.log(dataEdit);
+      //Lo ideal es usar este formato para poder comparar.
+      console.log(lastData);
 
       Swal.fire({
         title: "¿Deseas actualizar los datos?",
@@ -268,6 +268,38 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (response) {
+              //TODO: refactorizar y separar en función los mensajes de alertas.
+              if (response.status === 'success') {
+                Swal.fire({
+                  title: "Exito",
+                  icon: "success",
+                  text: response.message,
+                  showCloseButton: true,
+              });
+
+              closeModal(modal);
+              //TODO: mejorar por dibujar la fila, debo de solicitar el último registro actualizado Y devolverlo en el json encode.
+              myTable.ajax.reload();
+
+              }else if(response.status === 'info'){
+                console.log('hello world info');
+              }else if(response.status === 'info'){
+                console.log('hello world error');
+              }else{
+                console.log('error');
+              }
+
+              // if (condition) {
+                
+              // }
+
+              // Swal.fire({
+              //   titile: 'success',
+                
+              //   option: 'text',
+              //   option: 'success'
+              // });
+
               console.log(response);
             },
             error: function (xhr,error){
@@ -281,40 +313,7 @@ $(document).ready(function () {
 
       })
 
-      //Swal.fire({
-    //       title: '¿Estás seguro de agregar este paciente?',
-    //       showDenyButton: true,
-    //       showCancelButton: true,
-    //       confirmButtonText: 'Sí',
-    //       denyButtonText: 'No',
-    //       cancelButtonText: 'Cancelar',
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         $.ajax({
-    //           type: "POST",
-    //           url: "querys/functionsInsert.php",
-    //           data: {
-    //             data: dataJson,
-    //             codigo: 1
-    //           },
-    //           dataType: "json",
-    //           success: function (data) {
-    //             console.log(data.success);
-    //             Swal.fire({
-    //               title: data.success,
-    //               icon: 'success',
-    //               confirmButtonText: 'Aceptar',
-    //               showCancelButton: false
-    //             });
-    //             closeModal(modal);
-    //             myTable.ajax.reload();
-    //             $('#formPaciente')[0].reset();
-    //           }
-    //         });
-    //       }
-    //     }).catch((err) => {
-    //       console.error(err);
-    //     });
+      
     } else {
       // Modo registro (insertar)
       Swal.fire({

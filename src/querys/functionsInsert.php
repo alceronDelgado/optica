@@ -1,6 +1,7 @@
 <?php 
 
 require_once '../../config/conn.php';
+header('Content-Type: application/json; charset=UTF-8');
 
 function insertNewUser($clave,$nombre,$rol, $passwordInput){
     global $pdo;
@@ -126,9 +127,79 @@ function updatePaciente($formData,$dataLastRow){
         exit();
     }
 
+    $dataExecute = [
+        "status" => "success",
+        "message" => "Datos de paciente actualizado."
+    ];
 
-    return "";
+    //Comparo si los valores con el método array_diff. Este método me compara solo los valores, no las claves del arreglo.
+    if (empty(array_diff_assoc($formData,$dataLastRow) )) {
+        echo json_encode(['status'=>'info', 'message'=> 'datos igualesS']);
+        exit();
 
+    }
+
+    try {
+
+        $pac_docum = (!empty($formData['documento'])) ? trim($formData['documento']) : null;
+        $pac_nombre = trim($formData['nombrePaciente']);
+        $pac_apellido = trim($formData['apellidoPaciente']);
+        $pac_direccion = trim($formData['direccionPaciente']);
+        $pac_telefono = trim($formData['telefonoPaciente']);
+        $pac_email = trim($formData['emailPaciente']);
+        $gen_id = trim($formData['genero']);
+        $estrato = trim($formData['estrato']);
+        //Valido nuevamente ya que si aplico valor ternario si empty esta vacio el va a guardarme un NULL, no un false. 
+        if ($pac_docum === null) {
+            echo json_encode(["error" => "El documento no puede estar vacío"]);
+            exit();
+        }
+
+        //Valido que nombre, documento y teléfono no esten vacios.
+        if (empty($pac_nombre) || empty($pac_apellido) || empty($pac_telefono)) {
+            echo json_encode(['status'=>'error','message'=>'faltan datos obligatorios']);
+            exit();
+        }
+
+        $sql= "UPDATE paciente SET pac_nombre = :pac_nombre,pac_apellido= :pac_apellido, pac_direccion= :pac_direccion, pac_telefono= :pac_telefono,pac_email= :pac_email, gen_id= :gen_id, estr_id = :estr_id WHERE pac_docum = :pac_docum";
+
+        $sqlUpdate = $pdo->prepare($sql);
+        $sqlUpdate->bindValue(":pac_docum",$pac_docum,PDO::PARAM_INT);
+        $sqlUpdate->bindValue(":pac_nombre",$pac_nombre,PDO::PARAM_STR);
+        $sqlUpdate->bindValue(":pac_apellido",$pac_apellido,PDO::PARAM_STR);
+        $sqlUpdate->bindValue(":pac_direccion",$pac_direccion,PDO::PARAM_STR);
+        $sqlUpdate->bindValue(":pac_telefono",$pac_telefono,PDO::PARAM_INT);
+        $sqlUpdate->bindValue(":pac_email",$pac_email, PDO::PARAM_STR);
+        $sqlUpdate->bindValue(":gen_id",$gen_id,PDO::PARAM_INT);
+        $sqlUpdate->bindValue(":estr_id",$estrato,PDO::PARAM_INT);
+
+        
+
+        if (!$sqlUpdate->execute()) {
+            //Capturo el error de la consulta
+            $errorSqlUpdate = $sqlUpdate->errorInfo();
+
+            //En caso de error, retorno el arreglo para aplicar jsonEncode.
+            $dataExecute = [
+                "status" => "Error",
+                "message" => "Error en consulta $errorSqlUpdate"
+            ];
+            
+            return $dataExecute;
+        }
+
+        
+
+    } catch (\Throwable $th) {
+        
+        $dataExecute = [
+            "status" => "error",
+            "message" => "error al realizar la inserción $th"
+        ];
+        return $dataExecute;
+
+    }
+    return $dataExecute;
 
 }
 
@@ -139,42 +210,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $formData = [];
 
-    if($codigo == '2'){
+
+    if($codigo == "2"){
         $data = $_POST['data'];
         //Esta variable me captura los registros anteriores al update del paciente, en caso de que se daban comparar o si no hay ningun cambio, así evitamos ejecutar un update.
         $dataLastRow = $_POST['lastRow'];
-        var_dump($dataLastRow);
+        //var_dump($dataLastRow);
 
+        $excludeKeys = ['idHobbies','idGenero','idEstrato'];
+
+        foreach($excludeKeys as $keys){
+            unset($dataLastRow[$keys]);
+        }
     }
     
+    //var_dump($dataLastRow);
     $newDataArg = json_decode($data,true);
 
     foreach ($newDataArg as $field) {
         $formData[$field['name']] = $field['value'];
     }
-    var_dump($formData);
+    //echo '<br>';
+
+    //var_dump($formData);
+    //var_dump($dataLastRow);
 
     switch ($codigo) {
         //Insert
         case 1:
             
             $data = newPaciente($formData);
-
-            if($data){
-                echo json_encode($data);
-            }
             break;
 
         //Update
         case 2:
             $data = updatePaciente($formData,$dataLastRow);
-            //echo json_encode(["success" => "Registro exitoso","data" => $data]);
             break;
             
         default:
-            echo "error";
+            $data = ["error" => "Código no válido"];
             break;
     }
+
+    echo json_encode($data);
 
 
 }

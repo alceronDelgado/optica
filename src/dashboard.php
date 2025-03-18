@@ -82,23 +82,23 @@ if(empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['r
           </div>
           <div class="col s6 m6">
             <label for="" id="labelNombre" class="labelText"></label>
-            <input type="text" name="nombre" id="nombrePaciente" placeholder="Nombre">
+            <input type="text" name="nombrePaciente" id="nombrePaciente" placeholder="Nombre">
           </div>
           <div class="col s6 m6">
             <label for="" id="labelApellido" class="labelText"></label>
-            <input type="text" name="apellido" id="apellidoPaciente" placeholder="Apellido">
+            <input type="text" name="apellidoPaciente" id="apellidoPaciente" placeholder="Apellido">
           </div>
           <div class="col s6 m6">
             <label for="" id="labelDireccion" class="labelText"></label>
-            <input type="text" name="direccion" id="direccionPaciente" placeholder="direccion">
+            <input type="text" name="direccionPaciente" id="direccionPaciente" placeholder="direccion">
           </div>
           <div class="col s6 m6">
             <label for="" id="labelTelefono" class="labelText"></label> 
-            <input type="number" min="0" name="telefono" id="telefonoPaciente" placeholder="Telefono">
+            <input type="number" min="0" name="telefonoPaciente" id="telefonoPaciente" placeholder="Telefono">
           </div>
           <div class="col s6 m6">
             <label for="" id="labelEmail" class="labelText"></label>
-            <input type="email" name="email" id="emailPaciente" placeholder="Email">
+            <input type="email" name="emailPaciente" id="emailPaciente" placeholder="Email">
           </div>
           
           <!-- Estratos -->
