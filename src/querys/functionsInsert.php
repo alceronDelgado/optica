@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+use function PHPSTORM_META\type;
 
 require_once '../../config/conn.php';
 header('Content-Type: application/json; charset=UTF-8');
@@ -203,37 +205,83 @@ function updatePaciente($formData,$dataLastRow){
 
 }
 
+function inactivePaciente($documento){
+
+    $deletePaciente = true;
+    $est_id = 2;
+
+    
+
+    
+
+    global $pdo;
+
+
+
+    $sql = "UPDATE paciente SET est_id = :est_id WHERE pac_docum = :pac_docum";
+
+    $stm = $pdo->prepare($sql);
+    $stm->bindValue(':est_id', $est_id, PDO::PARAM_INT);
+    $stm->bindValue(':pac_docum', $documento, PDO::PARAM_INT);
+    
+    if (!$stm->execute()) {
+        $deletePaciente = ["error" => "Error al eliminar registro"];
+        return $deletePaciente;
+    }
+    
+    $deletePaciente = ["success" => "Registro Inhabilitado con exito."];
+
+    return $deletePaciente;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $codigo = ($_POST['codigo'] == '1' || $_POST['codigo'] == '2') ? $_POST['codigo'] : null;
-    $data = $_POST['data'];
+    $codigo = ($_POST['codigo'] == '1' || $_POST['codigo'] == '2' || $_POST['codigo'] == '3') ? $_POST['codigo'] : null;
 
+    if ($codigo == '1') {
+        $data = $_POST['data'];
+    }
+    
     $formData = [];
-
-
+    
     if($codigo == "2"){
         $data = $_POST['data'];
         //Esta variable me captura los registros anteriores al update del paciente, en caso de que se daban comparar o si no hay ningun cambio, así evitamos ejecutar un update.
         $dataLastRow = $_POST['lastRow'];
-        //var_dump($dataLastRow);
 
         $excludeKeys = ['idHobbies','idGenero','idEstrato'];
 
+        //TODO: POR MEJORAR, LA IDEA ES COMPARAR EL ANTERIOR REGISTRO CON EL NUEVO PARA SABER SI LOS DATOS SON IGUALES, SI SON IGUALES JUNTO A SU CLAVE.. NO DEBE DE HABER UN CAMBIO.
         foreach($excludeKeys as $keys){
             unset($dataLastRow[$keys]);
         }
     }
+
+    if ($codigo == '1') {
+        $data = $_POST['data'];
+    } else if ($codigo == '2') {
+        $data = $_POST['data'];  
+        $dataLastRow = $_POST['lastRow'];  
+    } else if ($codigo == '3') {
+        $data = $_POST['documento']; 
+    }
     
-    //var_dump($dataLastRow);
     $newDataArg = json_decode($data,true);
 
-    foreach ($newDataArg as $field) {
-        $formData[$field['name']] = $field['value'];
+    
+    if (is_array($newDataArg)) {
+        foreach ($newDataArg as $field) {
+            $formData[$field['name']] = $field['value'];
+        }
     }
-    //echo '<br>';
 
-    //var_dump($formData);
-    //var_dump($dataLastRow);
+    if ($codigo == "3") {
+        $documento = $_POST['documento'];  
+        if (empty($documento)) {
+        echo json_encode(['error' => 'El documento no puede estar vacío']);
+        exit();
+        }
+    }
 
     switch ($codigo) {
         //Insert
@@ -245,6 +293,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //Update
         case 2:
             $data = updatePaciente($formData,$dataLastRow);
+            break;
+
+        //Delete
+        case 3:
+            $data = inactivePaciente($documento);
             break;
             
         default:

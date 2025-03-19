@@ -47,13 +47,13 @@ $(document).ready(function () {
         data: null,
         render: function (info) {
           return `
-                      <div class="text-center">
-                          <div class="btn-group" role="group" aria-label="Button group">
-                              <button id="btnDetalleHistoria" class="btn btn-info" type="button">Ver Historia</button>
-                              <button id="btnEditar" class="btn btn-primary" type="button">Editar</button>
-                              <button id="btnEliminar" data-id="${info.documento}" class="btn btn-danger eliminarbtn" type="button">Eliminar</button>
-                          </div>
-                      </div>`;
+                  <div class="text-center">
+                      <div class="btn-group" role="group" aria-label="Button group">
+                        <button id="btnDetalleHistoria" class="btn green" type="button">Ver Historia</button>
+                        <button id="btnEditar" class="btn btn blue" type="button">Editar</button>
+                        <button id="btnEliminar" data-id="${info.documento}" class="btn red eliminarbtn" type="button">Eliminar</button>
+                      </div>
+                  </div>`;
         },
       },
     ],
@@ -247,9 +247,7 @@ $(document).ready(function () {
     // Verificar si estamos en modo de edición
     if (editMode) {
 
-      console.log(dataEdit);
       //Lo ideal es usar este formato para poder comparar.
-      console.log(lastData);
 
       Swal.fire({
         title: "¿Deseas actualizar los datos?",
@@ -371,6 +369,59 @@ $(document).ready(function () {
         });
     }
 
+    
+  });
+
+  //Eliminar paciente
+  $(document).on("click", "#btnEliminar", function (e) {
+    e.preventDefault();
+    let rw = $(this).closest("tr");
+    let data = myTable.row(rw).data(); 
+    let documento = data.documento;
+
+    swal.fire({
+      title: "",
+      text:"¿Esta seguro de eliminar este paciente?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+    }).then(respuesta => {
+      if(respuesta.isConfirmed){
+        $.ajax({
+          type: "POST",
+          url: "querys/functionsInsert.php",
+          datatype: "json",
+          data: {
+            codigo: 3,
+            documento: documento,
+          },
+          dataType: "json",
+          success: function (data) {
+            console.log(data);
+            if (data.success) {
+              Swal.fire({
+                title: "¡Exito!",
+                text: data.success,
+                icon: "success",  
+                showConfirmButton: true,
+                confirmButtonText: "Aceptar"
+              });
+              myTable.ajax.reload();
+              
+            }else{
+              Swal.fire({
+                title: "Error",
+                text: data.error,
+                icon: "error",
+                showConfirmButton: true,
+                confirmButtonText:"Aceptar"
+              });
+            }
+          },
+        });
+      }
+
+    });
     
   });
 
