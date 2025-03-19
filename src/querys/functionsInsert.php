@@ -32,20 +32,25 @@ function insertNewUser($clave,$nombre,$rol, $passwordInput){
 function newPaciente($formData){
 
     global $pdo;
+    
+
+    //var_dump($formData);
 
     $documentoPaciente = (!empty($formData['documento']) && is_numeric($formData['documento'])) ? $formData['documento'] : null;
-    $nombrePaciente = $formData['nombre'];
-    $apellidoPaciente = $formData['apellido'];
-    $direccionPaciente = $formData['direccion'];
-    $telefonoPaciente = (is_numeric($formData['telefono'])) ? $formData['telefono'] : null;
+    $nombrePaciente = $formData['nombrePaciente'];
+    $apellidoPaciente = $formData['apellidoPaciente'];
+    $direccionPaciente = $formData['direccionPaciente'];
+    $telefonoPaciente = (is_numeric($formData['telefonoPaciente'])) ? $formData['telefonoPaciente'] : null;
     //Uso filter var para validar si el viene el campo vacio o null o si no es numerico, no aplico la condición de vacio porque ya lo valida el propio filter_var ya que si viene null o vacio, el devolvera false, empty hace lo mismo.
-    $emailPaciente = (filter_var($formData['email'],FILTER_VALIDATE_EMAIL)) ? $formData['email'] : null;
+    $emailPaciente = (filter_var($formData['emailPaciente'],FILTER_VALIDATE_EMAIL)) ? $formData['emailPaciente'] : null;
     $generoPaciente = $formData['genero'];
     $estratoPaciente = $formData['estrato'];
 
     $hobbiesPaciente = (is_array($formData['hobbies']) && !empty($formData['hobbies'])) ? $formData['hobbies'] : [];
+    $est_id = 1;
 
 
+    //Creo sentencia que me permita saber si ya existe el dato en la bd.
     $checkDocumento = $pdo->prepare("SELECT COUNT(*) FROM paciente WHERE pac_docum = :documento");
     $checkDocumento->bindParam(':documento', $documentoPaciente, PDO::PARAM_INT);
     $checkDocumento->execute();
@@ -62,7 +67,7 @@ function newPaciente($formData){
         //Como vamos a insertar datos en multiples tablas, lo recomendable en pdo es usar la palabra reservada getTransation, esto hace que si hay un error, se puede revertir las operaciones si alguna falla.
             $pdo->beginTransaction();
 
-        $sql = "INSERT INTO paciente (pac_docum,pac_nombre,pac_apellido,pac_direccion,pac_telefono,pac_email,gen_id,estr_id) VALUES (:pac_docum,:pac_nombre,:pac_apellido,:pac_direccion,:pac_telefono,:pac_email,:gen_id,:estr_id)";
+        $sql = "INSERT INTO paciente (pac_docum,pac_nombre,pac_apellido,pac_direccion,pac_telefono,pac_email,gen_id,estr_id,est_id) VALUES (:pac_docum,:pac_nombre,:pac_apellido,:pac_direccion,:pac_telefono,:pac_email,:gen_id,:estr_id,:est_id)";
 
         $insertNewPacient = $pdo->prepare($sql);
     
@@ -74,9 +79,9 @@ function newPaciente($formData){
         $insertNewPacient->bindParam(':pac_email',$emailPaciente);
         $insertNewPacient->bindParam(':gen_id',$generoPaciente,PDO::PARAM_INT);
         $insertNewPacient->bindParam(':estr_id',$estratoPaciente,PDO::PARAM_INT);
+        $insertNewPacient->bindParam(':est_id',$est_id,PDO::PARAM_INT);
 
 
-        
         //Antes de usar implode recomendable validar si los datos que vamos a unir en una cadena de texto sea de tipo arreglo. 
         if (!empty($hobbiesPaciente)) {
             $placeHolders = [];
@@ -244,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $formData = [];
     
-    if($codigo == "2"){
+    if($codigo == '2'){
         $data = $_POST['data'];
         //Esta variable me captura los registros anteriores al update del paciente, en caso de que se daban comparar o si no hay ningun cambio, así evitamos ejecutar un update.
         $dataLastRow = $_POST['lastRow'];
@@ -267,15 +272,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     $newDataArg = json_decode($data,true);
-
-    
     if (is_array($newDataArg)) {
         foreach ($newDataArg as $field) {
             $formData[$field['name']] = $field['value'];
         }
     }
 
-    if ($codigo == "3") {
+    if ($codigo == '3') {
         $documento = $_POST['documento'];  
         if (empty($documento)) {
         echo json_encode(['error' => 'El documento no puede estar vacío']);
