@@ -52,6 +52,7 @@ $(document).ready(function () {
                         <button id="btnAddHistoria" class="btn green btn-action" type="button">Crear Historia</button>
                         <button id="btnEditar" class="btn btn blue btn-action" type="button">Editar</button>
                         <button id="btnEliminar" data-id="${info.documento}" class="btn red eliminarbtn btn-action" type="button">Eliminar</button>
+                        <button id="btnDetalleHistoria"  class="btn red eliminarbtn btn-action" type="button">Historia</button>
                       </div>
                   </div>`;
         },
@@ -497,34 +498,6 @@ $(document).ready(function () {
    * 
    */
 
-  //Oculto el modal al cargar la Página>
-  // $("#myModalHistoria").hide();
-  // $(document).on("click", "#btnAddHistoria", function(x){
-  //   x.preventDefault();
-  //   x.stopPropagation();
-
-
-  //   modal = $("#myModalHistoria");
-  //   btn = $(".btnDivHistoria #btnHistoriaPaciente");
-  //   closeBtn = $('#closeModalPaciente');
-  //   openModal(modal);
-  //   modalKeydown();
-
-  //   let codigoModal = 2;
-  //   backGroundModal = "#2bbbad";
-
-
-  //   labelsForm = {
-  //     modalTitleHistoria: "Historia del paciente",  
-  //     textBtn: "Guardar Historia",  
-  //   };
-
-  //   modalPropertyes(labelsForm, modalTitle, btn, backGroundModal,codigoModal);
-
-
-  // });
-
-
   //Abrir modal historia.
   $(document).on("click", "#btnAddHistoria", function (f) {
     f.preventDefault();
@@ -533,13 +506,14 @@ $(document).ready(function () {
     let dataPac = $(this).closest("tr");
     let data = myTable.row(dataPac).data();
 
-
     $('#documentoPacienteHistoria').text(data.documento);
     $('#nombrePacienteHistoria').text(data.nombrePaciente);
     $('#apellidoPacienteHistoria').text(data.apellidoPaciente);
     $('#telefonoPacienteHistoria').text(data.telefonoPaciente);
     $('#generoPacienteHistoria').text(data.genero);
     $('#estratoPacienteHistoria').text(data.estrato);
+
+    console.log(data);
 
     $("#myModalHistoria").show();
     $('#btnHistoriaPaciente').text("Guardar");
@@ -558,9 +532,6 @@ $(document).ready(function () {
 
     let dataHistoria = $(this).serializeArray();
 
-    // let spanPaciente = $('#documentoPacienteHistoria').text();
-    // console.log('Documento del paciente: ' + spanPaciente);
-    // dataHistoria.push({ name: 'documentoPaciente', value: spanPaciente });
     console.log(dataHistoria);
 
     let spanPaciente = $('#documentoPacienteHistoria').text();
@@ -605,11 +576,73 @@ $(document).ready(function () {
     });
   });
 
+  $(document).on('click', '#btnDetalleHistoria', function (e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    let data = $(this).closest("tr");
+    let dataHistoria = myTable.row(data).data();
+    let documentoPaciente = dataHistoria.documento;
+    $.ajax({
+      url: 'querys/functionsSelectsTwo.php',
+      type: 'POST',
+      data: {
+        codigoSelect: 2,
+        documento: documentoPaciente
+      },
+      dataType: 'json',
+      success: function (data) {
+        let pacienteData = data.data.data;
+
+        if (data.data.status === false) {
+          Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "No se encontraron datos.",
+            showCloseButton: true,
+          });
+        }
+
+        if (data.data.status === true) {
+          $("#myModalHistoria").show();
+          $('#btnHistoriaPaciente').hide();
+          $('#modalTitleHistoria').text("Detalle Historia Clinica");
+          $('body').css('background-color', 'lightgray');
+
+          $('#nombrePacienteHistoria').text(pacienteData.nombre);
+          $('#nombrePacienteHistoria').text(pacienteData.nombre);
+          $('#apellidoPacienteHistoria').text(pacienteData.apellido);
+          $('#telefonoPacienteHistoria').text(pacienteData.telefono);
+          $('#generoPacienteHistoria').text(pacienteData.genero);
+          $('#estratoPacienteHistoria').text(pacienteData.estrato);
+          $('#esferaOd').val(pacienteData.esfod);
+          $('#cilindOD').val(pacienteData.cilod);
+          $('#ejeOd').val(pacienteData.ejeod);
+          $('#esferaId').val(pacienteData.esfoid);
+          $('#cilindOI').val(pacienteData.ciloi);
+          $('#ejeId').val(pacienteData.ejeoi);
+          $('#diagOi').val(pacienteData.diaoi);
+          $('#diagOd').val(pacienteData.diaod);
+          $('#hist_motv').text(pacienteData.motv);
+          $('#hist_recom').text(pacienteData.recom);
+          modalTitle.text(labelsForm.title);
+          modalKeydown();
+        } 
+      }
+    });
+        
+
+  });
+
 
   //Cerrar modal historia
   $(document).on('click', '#closeModalPaciente', function (e) {
     $("#myModalHistoria").hide();
     $('body').css('background-color', 'white');
+    $('#formHistoriaPaciente')[0].reset();
+    //$('#hist_recom').val('');
+    //$('#hist_motv').val('');
+    
 
   });
 

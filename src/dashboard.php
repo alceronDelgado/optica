@@ -88,7 +88,7 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
           </div>
           <div class="col s6 m6">
             <label for="" id="" class="labelText">Nombre</label>
-            <span id="pac_id"></span>
+            <span id="nombrePacienteHistoria"></span>
           </div>
           <div class="col s6 m6">
             <label for="" id="" class="labelText">Apellido</label>
