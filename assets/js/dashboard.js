@@ -49,7 +49,7 @@ $(document).ready(function () {
           return `
                   <div class="text-center">
                       <div class="btn-group" role="group" aria-label="Button group">
-                        <button id="btnDetalleHistoria" class="btn green" type="button">Ver Historia</button>
+                        <button id="btnAddHistoria" class="btn green" type="button">Crear Historia</button>
                         <button id="btnEditar" class="btn btn blue" type="button">Editar</button>
                         <button id="btnEliminar" data-id="${info.documento}" class="btn red eliminarbtn" type="button">Eliminar</button>
                       </div>
@@ -61,6 +61,7 @@ $(document).ready(function () {
 
   $("#titleUser").text("Pacientes");
   let modal = $("#myModal");
+  let modalPaciente = $("#myModalHistoria");
   let modalTitle = $("#modalTitle");
   let backGroundColorPrimary = $("body").css("background-color");
   let closeBtn = $("#closeModal");
@@ -96,21 +97,33 @@ $(document).ready(function () {
 
   //Función para enviar las propiedades específicas del modal.
   function modalPropertyes(labelsForm, modalTitle, btn, backGroundModal) {
-    console.log(labelsForm);
-    console.log({ "texto botón": labelsForm.textBtn });
-    modalTitle.text(labelsForm.title);
-    $("#labelDocumento").text(labelsForm.labelDocumento);
-    $("#labelNombre").text(labelsForm.labelNombre);
-    $("#labelApellido").text(labelsForm.labelApellido);
-    $("#labelDireccion").text(labelsForm.labelDireccion);
-    $("#labelTelefono").text(labelsForm.labelTelefono);
-    $("#labelEmail").text(labelsForm.labelEmail);
+    //let codigoModalPaciente = 1;
+    //let codigoModalHistoria = 2;
 
-    console.log(btn);
-    btn.text(labelsForm.textBtn);
-    // Aquí cambiamos el texto del botón usando `labelsForm.textBtn`
 
-    $(".backgroundModal").css("color", backGroundModal);
+ 
+      modalTitle.text(labelsForm.title);
+      $("#labelDocumento").text(labelsForm.labelDocumento);
+      $("#labelNombre").text(labelsForm.labelNombre);
+      $("#labelApellido").text(labelsForm.labelApellido);
+      $("#labelDireccion").text(labelsForm.labelDireccion);
+      $("#labelTelefono").text(labelsForm.labelTelefono);
+      $("#labelEmail").text(labelsForm.labelEmail);
+      
+      // Aquí cambiamos el texto del botón usando `labelsForm.textBtn`
+      btn.text(labelsForm.textBtn);
+      
+      $(".backgroundModal").css("color", backGroundModal);
+    
+    
+    // if (codigoModal === 2) {
+    //   modalTitle.text(labelsForm.title);
+    //   btn.text(labelsForm.textBtn);
+    //   $(".backgroundModal").css("color", backGroundModal);
+      
+    // }
+
+
   }
 
   closeBtn.on("click", function (e) {
@@ -125,6 +138,7 @@ $(document).ready(function () {
     g.stopPropagation();
     openModal(modal);
     modalKeydown();
+    let codigoModal = 1;
     backGroundModal = "#26A69A";
     labelsForm = {
       title: "Agregar paciente",
@@ -204,7 +218,6 @@ $(document).ready(function () {
         
       }
     });
-
 
     //Genero
     // let selectPaciente = $('select[name="genero"]');
@@ -476,4 +489,123 @@ $(document).ready(function () {
     });
 
   });
+
+
+  /***
+   * 
+   * Historia Paciente
+   * 
+   */
+
+  //Oculto el modal al cargar la Página>
+  // $("#myModalHistoria").hide();
+  // $(document).on("click", "#btnAddHistoria", function(x){
+  //   x.preventDefault();
+  //   x.stopPropagation();
+
+
+  //   modal = $("#myModalHistoria");
+  //   btn = $(".btnDivHistoria #btnHistoriaPaciente");
+  //   closeBtn = $('#closeModalPaciente');
+  //   openModal(modal);
+  //   modalKeydown();
+
+  //   let codigoModal = 2;
+  //   backGroundModal = "#2bbbad";
+
+
+  //   labelsForm = {
+  //     modalTitleHistoria: "Historia del paciente",  
+  //     textBtn: "Guardar Historia",  
+  //   };
+
+  //   modalPropertyes(labelsForm, modalTitle, btn, backGroundModal,codigoModal);
+
+
+  // });
+
+
+  //Abrir modal historia.
+  $(document).on("click", "#btnAddHistoria", function (f){ 
+    f.preventDefault();
+    f.stopPropagation();
+
+    let dataPac = $(this).closest("tr");
+    let data = myTable.row(dataPac).data();
+    console.log(data);
+
+    $('#documentoPacienteHistoria').text(data.documento);
+    $('#nombrePacienteHistoria').text(data.nombrePaciente);
+    $('#apellidoPacienteHistoria').text(data.apellidoPaciente);
+    $('#telefonoPacienteHistoria').text(data.telefonoPaciente);
+    $('#generoPacienteHistoria').text(data.genero);
+    $('#estratoPacienteHistoria').text(data.estrato);
+
+    $("#myModalHistoria").show();
+    $('#btnHistoriaPaciente').text("Guardar");
+    $('#modalTitleHistoria').text("Historia Clinica");
+    modalTitle.text(labelsForm.title);
+    $("#backgroundModalHistoria").css("color", 'red');
+    $('body').css('background-color', 'lightgray');
+    modalKeydown();
+    
+  });
+
+  //Evento submit envio formulario.
+  $(document).on('submit', '#formHistoriaPaciente', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  
+    let dataHistoria = $(this).serializeArray();
+    let dataHistoriaRegister = JSON.stringify(dataHistoria);
+
+    console.log(dataHistoriaRegister);
+  
+    $.ajax({
+      type: "POST",
+      url: "querys/functionsInsert.php",
+      data: {
+        codigo: 4,
+        data: dataHistoriaRegister
+      },
+      dataType: "json",
+      success: function(response) {
+        console.log(response);
+        if (response.status === 'success') {
+          Swal.fire({
+            title: "Éxito",
+            icon: "success",
+            text: response.message,
+            showCloseButton: true,
+          });
+  
+          // Close the modal after success
+          closeModal(modalPaciente);  // Ensure modalPaciente is defined somewhere
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error("Error during the AJAX request: ", error);
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: "Something went wrong. Please try again.",
+          showCloseButton: true,
+        });
+      }
+    });
+  });
+
+
+    //Cerrar modal historia
+    $(document).on('click', '#closeModalPaciente', function(e){
+      $("#myModalHistoria").hide();
+      $('body').css('background-color', 'white');
+  
+    });
+  
+
+
+
+
+
 });

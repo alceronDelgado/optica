@@ -210,18 +210,51 @@ function updatePaciente($formData,$dataLastRow){
 
 }
 
+function newHistory($formData){
+    
+    global $pdo;
+
+    // if (empty($formData['esfod']) || empty($formData['cilod']) || empty($formData['ejeod']) || empty($formData['diaod'])) {
+    //     echo json_encode(['error' => 'Faltan datos obligatorios']);
+    //     return;
+    // }
+
+    $sql = "INSERT INTO historias (hist_esfod, hist_cilod, hist_ejeod, hist_diaod, hist_esfoi, hist_ciloi, hist_ejeoi, hist_diaoi, hist_recom, hist_motv, pac_id) 
+                VALUES (:hist_esfod, :hist_cilod, :hist_ejeod, :hist_diaod, :hist_esfoi, :hist_ciloi, :hist_ejeoi, :hist_diaoi, :hist_recom, :hist_motv, :pac_id)";
+
+
+    $insertHistory = $pdo->prepare($sql);
+
+    $insertHistory->bindParam(':hist_esfod', $formData['esferaOd'], PDO::PARAM_STR);
+    $insertHistory->bindParam(':hist_cilod', $formData['cilindOD'],PDO::PARAM_STR);
+    $insertHistory->bindParam(':hist_ejeod', $formData['ejeOd'],PDO::PARAM_STR);
+    $insertHistory->bindParam(':hist_diaod', $formData['diagOd'],PDO::PARAM_STR);
+    $insertHistory->bindParam(':hist_esfoi', $formData['esfoi'],PDO::PARAM_STR);
+    $insertHistory->bindParam(':hist_ciloi', $formData['ciloi'],PDO::PARAM_STR);
+    $insertHistory->bindParam(':hist_ejeoi', $formData['ejeoi'],PDO::PARAM_STR);
+    $insertHistory->bindParam(':hist_diaoi', $formData['diaoi'],PDO::PARAM_STR);
+    $insertHistory->bindParam(':hist_recom', $formData['recomendacion'],PDO::PARAM_STR);
+    $insertHistory->bindParam(':hist_motv', $formData['motivoVisita'],PDO::PARAM_STR);
+    $insertHistory->bindParam(':pac_id', $formData['paciente'],PDO::PARAM_INT);
+
+
+    if ($insertHistory->execute()) {
+       
+        $info = ["success" => "Registro exitoso"];
+
+    }
+    
+    echo json_encode($info);
+    return $info;
+
+}
+
 function inactivePaciente($documento){
 
     $deletePaciente = true;
     $est_id = 2;
 
-    
-
-    
-
     global $pdo;
-
-
 
     $sql = "UPDATE paciente SET est_id = :est_id WHERE pac_docum = :pac_docum";
 
@@ -241,11 +274,12 @@ function inactivePaciente($documento){
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $codigo = ($_POST['codigo'] == '1' || $_POST['codigo'] == '2' || $_POST['codigo'] == '3') ? $_POST['codigo'] : null;
+    $codigo = ($_POST['codigo'] == '1' || $_POST['codigo'] == '2' || $_POST['codigo'] == '3') || ($_POST['codigo'] == '4') ? $_POST['codigo'] : null;
 
     if ($codigo == '1') {
         $data = $_POST['data'];
     }
+
     
     $formData = [];
     
@@ -269,13 +303,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $dataLastRow = $_POST['lastRow'];  
     } else if ($codigo == '3') {
         $data = $_POST['documento']; 
-    }
-    
-    $newDataArg = json_decode($data,true);
-    if (is_array($newDataArg)) {
-        foreach ($newDataArg as $field) {
-            $formData[$field['name']] = $field['value'];
-        }
+    }else if ($codigo == '4') {
+        $data = $_POST['data']; 
+        
     }
 
     if ($codigo == '3') {
@@ -283,6 +313,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (empty($documento)) {
         echo json_encode(['error' => 'El documento no puede estar vacío']);
         exit();
+        }
+    }
+
+    $newDataArg = json_decode($data,true);
+    if (is_array($newDataArg)) {
+        foreach ($newDataArg as $field) {
+            $formData[$field['name']] = $field['value'];
         }
     }
 
@@ -301,6 +338,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //Delete
         case 3:
             $data = inactivePaciente($documento);
+            break;
+        case 4:
+            $data = newHistory($formData);
             break;
             
         default:

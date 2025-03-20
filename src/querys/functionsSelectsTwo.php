@@ -24,7 +24,7 @@ function selectPacientes(){
         LEFT JOIN generos g ON g.gen_id = pac.gen_id
         LEFT JOIN paciente_hobbies ph ON ph.pac_id = pac.pac_docum
         LEFT JOIN hobbies h ON ph.hob_id = h.hob_id
-        GROUP BY(pac.pac_docum)";
+        WHERE pac.est_id = 1 GROUP BY(pac.pac_docum)";
 
 
     $selectSql = $pdo->prepare($sql);
