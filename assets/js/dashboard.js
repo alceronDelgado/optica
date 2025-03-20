@@ -589,17 +589,16 @@ $(document).ready(function () {
             text: response.message,
             showCloseButton: true,
           });
-
-          // Close the modal after success
-          closeModal(modalPaciente);  // Ensure modalPaciente is defined somewhere
+          closeModal(modalPaciente); 
+          //Reinicio modal después de insertar una historia.
+          $('#formHistoriaPaciente')[0].reset();
         }
       },
       error: function (xhr, status, error) {
-        console.error("Error during the AJAX request: ", error);
         Swal.fire({
           title: "Error",
           icon: "error",
-          text: "Something went wrong. Please try again.",
+          text: "Error en la consulta",
           showCloseButton: true,
         });
       }
