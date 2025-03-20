@@ -81,14 +81,14 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
         </div>
       </div>
       <form action="" method="post" id="formHistoriaPaciente">
-      <div class="row">
+        <div class="row">
           <div class="col s6 m6">
             <label for="" id="" class="labelText">Documento</label>
-            <span id="documentoPacienteHistoria"></span>
+            <span name="pac_id" id="documentoPacienteHistoria"></span>
           </div>
           <div class="col s6 m6">
             <label for="" id="" class="labelText">Nombre</label>
-            <span id="nombrePacienteHistoria"></span>
+            <span id="pac_id"></span>
           </div>
           <div class="col s6 m6">
             <label for="" id="" class="labelText">Apellido</label>
@@ -108,15 +108,17 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
           </div>
           <div class="col s12 m12">
             <label for="" id="" class="labelText  enter-align pt-4">Motivo Visita:</label>
-            <textarea name="motivoVisita" id="motivoVisita" cols="30" rows="10"></textarea>
+            <textarea name="hist_motv" id="hist_motv" cols="30" rows="10"></textarea>
           </div>
           <div class="col s4 m4">
             <label for="" id="" class="labelText">Esfera OD:</label>
-            <input type="number" name="esferaOd" id="esferaOd" placeholder="Esfera Ojo derecho">
+            <input type="number" name="hist_esfod" id="esferaOd" placeholder="Esfera Ojo derecho">
           </div>
           <div class="col s4 m4">
             <label for="" id="" class="labelText">Cilindo OD:</label>
-            <input type="number" name="cilindOD" id="cilindOD" placeholder="Cilindo Ojo derecho">
+
+
+            <input type="number" name="hist_cilod" id="cilindOD" placeholder="Cilindo Ojo derecho">
           </div>
           <div class="col s4 m4">
             <label for="" id="" class="labelText">Eje OD:</label>
@@ -124,25 +126,30 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
           </div>
           <div class="col s4 m4">
             <label for="" id="" class="labelText">Esfera ID:</label>
-            <input type="number" name="esferaId" id="esferaId" placeholder="Esfera Ojo Izquierdo">
+            <input type="number" name="hist_esfoi" id="esferaId" placeholder="Esfera Ojo Izquierdo">
           </div>
           <div class="col s4 m4">
             <label for="" id="" class="labelText">Cilindo ID:</label>
-            <input type="number" name="esferaId" id="cilindOD" placeholder="Cilindo Ojo Izquierdo">
+            <input type="number" name="hist_ciloi" id="cilindOI" placeholder="Cilindo Ojo Izquierdo">
           </div>
           <div class="col s4 m4">
             <label for="" id="" class="labelText">Eje ID:</label>
-            <input type="number" name="ejeId" id="ejeId" placeholder="Eje Ojo Izquierdo">
+            <input type="number" name="hist_ejeoi" id="ejeId" placeholder="Eje Ojo Izquierdo">
           </div>
 
           <div class="col s6 m6">
             <label for="" id="" class="labelText">Diagnostico OI:</label>
-            <input type="number" name="diagOi" id="diagOi" placeholder="Diagnostico Ojo Izquierdo">
+            <input type="number" name="hist_diaoi" id="diagOi" placeholder="Diagnostico Ojo Izquierdo">
           </div>
           <div class="col s6 m6">
             <label for="" id="" class="labelText">Diagnostico OD:</label>
-            <input type="number" name="diagOd" id="diagOd" placeholder="Diagnostico Ojo Derecho">
+            <input type="number" name="hist_diaod" id="diagOd" placeholder="Diagnostico Ojo Derecho">
           </div>
+          <div class="col s12 m12">
+            <label for="" id="" class="labelText">Recomendaciones:</label>
+            <textarea name="hist_recom" id="hist_recom" cols="30" rows="10" style="resize: none;"></textarea>
+          </div>
+
         </div>
         <div class="btnDivHistoria">
           <button type="submit" id="btnHistoriaPaciente" class="btn waves-effect waves-light center-align"></button>
@@ -162,8 +169,8 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
           <h2 id="modalTitle"></h2>
         </div>
       </div>
-        <form action="" method="post" id="formPaciente">
-          <div class="row">
+      <form action="" method="post" id="formPaciente">
+        <div class="row">
           <div class="col s6 m6">
             <label for="documento" id="labelDocumento" class="labelText"></label>
             <input type="number" name="documento" id="documentoPaciente" placeholder="Nro de documento">
@@ -181,61 +188,61 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
             <input type="text" name="direccionPaciente" id="direccionPaciente" placeholder="direccion">
           </div>
           <div class="col s6 m6">
-            <label for="" id="labelTelefono" class="labelText"></label> 
+            <label for="" id="labelTelefono" class="labelText"></label>
             <input type="number" min="0" name="telefonoPaciente" id="telefonoPaciente" placeholder="Telefono">
           </div>
           <div class="col s6 m6">
             <label for="" id="labelEmail" class="labelText"></label>
             <input type="email" name="emailPaciente" id="emailPaciente" placeholder="Email">
           </div>
-          
+
           <!-- Estratos -->
           <div class="col row s3">
-            <label for="" id="radioEstrato" class="labelText col s12 center-align" >Estrato:</label>
-          
-              <?php 
-                $dataEstratos = selectStratos();
-                $estratoDefault = 1; 
+            <label for="" id="radioEstrato" class="labelText col s12 center-align">Estrato:</label>
 
-                foreach ($dataEstratos as $estratosRow) { 
-                  // Verificar si el estrato actual es el seleccionado
-                  $checked = ($estratosRow['idEstratos'] == $estratoDefault) ? 'checked' : ''; 
-              ?>
-                
-                  <label>
-                    <input name="estrato" type="radio" id="" class="with-gap" value="<?php echo $estratosRow['idEstratos']; ?>" <?php echo $checked; ?>/>
-                    <span name="radioEstratoNombre"><?php echo $estratosRow['nombreEstrato']; ?></span>
-                  </label>
-                
+            <?php
+            $dataEstratos = selectStratos();
+            $estratoDefault = 1;
+
+            foreach ($dataEstratos as $estratosRow) {
+              // Verificar si el estrato actual es el seleccionado
+              $checked = ($estratosRow['idEstratos'] == $estratoDefault) ? 'checked' : '';
+            ?>
+
+              <label>
+                <input name="estrato" type="radio" id="" class="with-gap" value="<?php echo $estratosRow['idEstratos']; ?>" <?php echo $checked; ?> />
+                <span name="radioEstratoNombre"><?php echo $estratosRow['nombreEstrato']; ?></span>
+              </label>
+
             <?php } ?>
           </div>
           <!-- Genero -->
           <div class="col s6">
-          <label for='pacienteGeneroSelect' class='labelText'>Genero</label>
-          <select name='genero' id='pacienteGeneroSelect'>
-            <!-- <option value='0'>Seleccione un genero</option> -->
-            <?php 
+            <label for='pacienteGeneroSelect' class='labelText'>Genero</label>
+            <select name='genero' id='pacienteGeneroSelect'>
+              <!-- <option value='0'>Seleccione un genero</option> -->
+              <?php
               $dataGeneros = selectGeners();
               foreach ($dataGeneros as $generosRow) {
-            ?>
-              <option name="" class="generos" value="<?php echo $generosRow['genero'] ?>">
-                <?php echo $generosRow['nombreGenero']; ?>
-              </option>
-            <?php  } ?>
-          </select>
-            
-            
+              ?>
+                <option name="" class="generos" value="<?php echo $generosRow['genero'] ?>">
+                  <?php echo $generosRow['nombreGenero']; ?>
+                </option>
+              <?php  } ?>
+            </select>
+
+
           </div>
           <!-- Hobbies -->
           <div class="col row s3">
             <label for="labelHobbies" id="" class="labelText col s12 center-align">Hobbies:</label>
-            <?php 
-              $dataHobbies = selectHobbies();
-              $defaultHobbies = 1;
-              foreach ($dataHobbies as $rowHobbies) { 
-                
-                $checked = ($defaultHobbies == $rowHobbies['idHobbie']) ? 'checked' : '';
-                
+            <?php
+            $dataHobbies = selectHobbies();
+            $defaultHobbies = 1;
+            foreach ($dataHobbies as $rowHobbies) {
+
+              $checked = ($defaultHobbies == $rowHobbies['idHobbie']) ? 'checked' : '';
+
             ?>
               <label for="<?php echo $rowHobbies['idHobbie']; ?>" class="col s12">
                 <input type="checkbox" class="filled-in" value="<?php echo $rowHobbies['idHobbie']; ?>" id="<?php echo $rowHobbies['idHobbie']; ?>" name="hobbies" />
@@ -245,16 +252,16 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
               </label>
 
             <?php } ?>
-            
+
           </div>
 
           <div class="col s12 center-align btnDiv">
             <button type="submit" class="btn pacBtn waves-effect waves-light" id="btnPaciente"></button>
           </div>
-          </form>
+      </form>
     </div>
 
-</div>
+  </div>
 
 
 

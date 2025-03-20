@@ -49,9 +49,9 @@ $(document).ready(function () {
           return `
                   <div class="text-center">
                       <div class="btn-group" role="group" aria-label="Button group">
-                        <button id="btnAddHistoria" class="btn green" type="button">Crear Historia</button>
-                        <button id="btnEditar" class="btn btn blue" type="button">Editar</button>
-                        <button id="btnEliminar" data-id="${info.documento}" class="btn red eliminarbtn" type="button">Eliminar</button>
+                        <button id="btnAddHistoria" class="btn green btn-action" type="button">Crear Historia</button>
+                        <button id="btnEditar" class="btn btn blue btn-action" type="button">Editar</button>
+                        <button id="btnEliminar" data-id="${info.documento}" class="btn red eliminarbtn btn-action" type="button">Eliminar</button>
                       </div>
                   </div>`;
         },
@@ -101,26 +101,26 @@ $(document).ready(function () {
     //let codigoModalHistoria = 2;
 
 
- 
-      modalTitle.text(labelsForm.title);
-      $("#labelDocumento").text(labelsForm.labelDocumento);
-      $("#labelNombre").text(labelsForm.labelNombre);
-      $("#labelApellido").text(labelsForm.labelApellido);
-      $("#labelDireccion").text(labelsForm.labelDireccion);
-      $("#labelTelefono").text(labelsForm.labelTelefono);
-      $("#labelEmail").text(labelsForm.labelEmail);
-      
-      // Aquí cambiamos el texto del botón usando `labelsForm.textBtn`
-      btn.text(labelsForm.textBtn);
-      
-      $(".backgroundModal").css("color", backGroundModal);
-    
-    
+
+    modalTitle.text(labelsForm.title);
+    $("#labelDocumento").text(labelsForm.labelDocumento);
+    $("#labelNombre").text(labelsForm.labelNombre);
+    $("#labelApellido").text(labelsForm.labelApellido);
+    $("#labelDireccion").text(labelsForm.labelDireccion);
+    $("#labelTelefono").text(labelsForm.labelTelefono);
+    $("#labelEmail").text(labelsForm.labelEmail);
+
+    // Aquí cambiamos el texto del botón usando `labelsForm.textBtn`
+    btn.text(labelsForm.textBtn);
+
+    $(".backgroundModal").css("color", backGroundModal);
+
+
     // if (codigoModal === 2) {
     //   modalTitle.text(labelsForm.title);
     //   btn.text(labelsForm.textBtn);
     //   $(".backgroundModal").css("color", backGroundModal);
-      
+
     // }
 
 
@@ -210,12 +210,12 @@ $(document).ready(function () {
     });
 
     //Hobbies
-    $('input[name="hobbies"]').each(function (){
+    $('input[name="hobbies"]').each(function () {
       let checkboxButtonValue = $(this).val();
-      
+
       if (dataIdHobbies.includes(checkboxButtonValue)) {
         $(this).prop("checked", true);
-        
+
       }
     });
 
@@ -237,9 +237,9 @@ $(document).ready(function () {
       // Si el valor de la opción coincide con el valor de dataIdGenero
       if ($(this).val() === dataIdGenero) {
         console.log('dentro del if.');
-          //$(this).prop('selected', true);
-          //$("#pacienteGeneroSelect option[value="+ dataIdGenero +"]").attr("selected",true);
-          //console.log($(this).prop('selected', true));
+        //$(this).prop('selected', true);
+        //$("#pacienteGeneroSelect option[value="+ dataIdGenero +"]").attr("selected",true);
+        //console.log($(this).prop('selected', true));
 
       }
     });
@@ -249,10 +249,10 @@ $(document).ready(function () {
   });
 
   //Botón para enviar datos a php.
-  $(document).on("click", "#btnPaciente",lastData, function (f) {
+  $(document).on("click", "#btnPaciente", lastData, function (f) {
     f.preventDefault();
     f.stopPropagation();
-    
+
     // Capturar datos del formulario
     let dataEdit = form.serializeArray();
     let dataRegister = JSON.stringify(dataEdit);
@@ -267,13 +267,13 @@ $(document).ready(function () {
         showDenyButton: true,
         showCancelButton: true,
         confirmButtonText: "Guardar",
-      }).then((result) =>{
+      }).then((result) => {
         if (result.isConfirmed) {
           $.ajax({
             type: "POST",
             url: "querys/functionsInsert.php",
             data: {
-              codigo:2,
+              codigo: 2,
               data: dataRegister,
               lastRow: lastData
             },
@@ -286,45 +286,45 @@ $(document).ready(function () {
                   icon: "success",
                   text: response.message,
                   showCloseButton: true,
-              });
+                });
 
-              closeModal(modal);
-              //TODO: mejorar por dibujar la fila, debo de solicitar el último registro actualizado Y devolverlo en el json encode.
-              myTable.ajax.reload();
+                closeModal(modal);
+                //TODO: mejorar por dibujar la fila, debo de solicitar el último registro actualizado Y devolverlo en el json encode.
+                myTable.ajax.reload();
 
-              }else if(response.status === 'info'){
+              } else if (response.status === 'info') {
                 console.log('hello world info');
-              }else if(response.status === 'info'){
+              } else if (response.status === 'info') {
                 console.log('hello world error');
-              }else{
+              } else {
                 console.log('error');
               }
 
               // if (condition) {
-                
+
               // }
 
               // Swal.fire({
               //   titile: 'success',
-                
+
               //   option: 'text',
               //   option: 'success'
               // });
 
               console.log(response);
             },
-            error: function (xhr,error){
+            error: function (xhr, error) {
               throw new Error("Error en la consulta", xhr, error);
-              
+
             }
           });
-        }else{
+        } else {
           console.log('cancelado');
         }
 
       })
 
-      
+
     } else {
       // Modo registro (insertar)
       Swal.fire({
@@ -335,71 +335,71 @@ $(document).ready(function () {
         denyButtonText: "No",
         cancelButtonText: "Cancelar",
       }).then((result) => {
-          if (result.isConfirmed) {
-            $.ajax({
-              type: "POST",
-              url: "querys/functionsInsert.php",
-              data: {
-                data: dataRegister,
-                codigo: 1,
-              },
-              dataType: "json",
-              success: function (data) {
-                console.log(data);
-                if (data.error) {
-                  Swal.fire({
-                    title: "Error",
-                    text: data.error,
-                    icon: "error",
-                    showConfirmButton: true,
-                    confirmButtonText:"Aceptar"
-                  });
-                  
-                }else{
-                  Swal.fire({
-                    title: "Registro Exitoso",
-                    text: data.success,
-                    icon: "success",  
-                    showConfirmButton: true,
-                    confirmButtonText: "Aceptar"
-                  });
-                  
-                  
-                  closeModal(modal);
-                  myTable.ajax.reload();
-                  $("#formPaciente")[0].reset();
-                  
-                }
-                
-                
-                
-              },
-            });
-          }
-        })
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "querys/functionsInsert.php",
+            data: {
+              data: dataRegister,
+              codigo: 1,
+            },
+            dataType: "json",
+            success: function (data) {
+              console.log(data);
+              if (data.error) {
+                Swal.fire({
+                  title: "Error",
+                  text: data.error,
+                  icon: "error",
+                  showConfirmButton: true,
+                  confirmButtonText: "Aceptar"
+                });
+
+              } else {
+                Swal.fire({
+                  title: "Registro Exitoso",
+                  text: data.success,
+                  icon: "success",
+                  showConfirmButton: true,
+                  confirmButtonText: "Aceptar"
+                });
+
+
+                closeModal(modal);
+                myTable.ajax.reload();
+                $("#formPaciente")[0].reset();
+
+              }
+
+
+
+            },
+          });
+        }
+      })
         .catch((err) => {
           console.error(err);
         });
     }
 
-    
+
   });
 
   //Eliminar paciente
   $(document).on("click", "#btnEliminar", function (e) {
     e.preventDefault();
     let rw = $(this).closest("tr");
-    let data = myTable.row(rw).data(); 
+    let data = myTable.row(rw).data();
     let documento = data.documento;
 
     swal.fire({
       title: "",
-      text:"¿Esta seguro de eliminar este paciente?",
+      text: "¿Esta seguro de eliminar este paciente?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Eliminar",
     }).then(respuesta => {
-      if(respuesta.isConfirmed){
+      if (respuesta.isConfirmed) {
         $.ajax({
           type: "POST",
           url: "querys/functionsInsert.php",
@@ -415,19 +415,19 @@ $(document).ready(function () {
               Swal.fire({
                 title: "¡Exito!",
                 text: data.success,
-                icon: "success",  
+                icon: "success",
                 showConfirmButton: true,
                 confirmButtonText: "Aceptar"
               });
               myTable.ajax.reload();
-              
-            }else{
+
+            } else {
               Swal.fire({
                 title: "Error",
                 text: data.error,
                 icon: "error",
                 showConfirmButton: true,
-                confirmButtonText:"Aceptar"
+                confirmButtonText: "Aceptar"
               });
             }
           },
@@ -435,23 +435,23 @@ $(document).ready(function () {
       }
 
     });
-    
+
   });
 
   //Cerrar sesión
-  $('#close').on('click',function(f){
+  $('#close').on('click', function (f) {
     f.preventDefault();
-    
+
     Swal.fire({
-      title:"¿Deseas salir de la aplicación?",
+      title: "¿Deseas salir de la aplicación?",
       draggable: true,
-      icon:'info',
+      icon: 'info',
       showDenyButton: true,
       showCancelButton: false,
       confirmButtonText: "Si",
       denyButtonText: `No`
-    }).then((result) =>{
-      if(result.isConfirmed){
+    }).then((result) => {
+      if (result.isConfirmed) {
 
         Swal.fire({
           title: 'Cerrando sesión...',
@@ -464,10 +464,10 @@ $(document).ready(function () {
         });
 
         $.ajax({
-          url:'querys/sessionDestroy.php',
-          type:'POST',
-          success: function(data){
-            if(data){
+          url: 'querys/sessionDestroy.php',
+          type: 'POST',
+          success: function (data) {
+            if (data) {
 
               Swal.fire({
                 title: '¡Hasta luego!',
@@ -475,14 +475,14 @@ $(document).ready(function () {
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
               }).then(() => {
-                window.location.replace("../index.php"); 
+                window.location.replace("../index.php");
               });
             }
-            
+
           }
 
         });
-      }else if(result.isDenied){
+      } else if (result.isDenied) {
         Swal.close();
       }
 
@@ -526,13 +526,13 @@ $(document).ready(function () {
 
 
   //Abrir modal historia.
-  $(document).on("click", "#btnAddHistoria", function (f){ 
+  $(document).on("click", "#btnAddHistoria", function (f) {
     f.preventDefault();
     f.stopPropagation();
 
     let dataPac = $(this).closest("tr");
     let data = myTable.row(dataPac).data();
-    console.log(data);
+
 
     $('#documentoPacienteHistoria').text(data.documento);
     $('#nombrePacienteHistoria').text(data.nombrePaciente);
@@ -548,19 +548,30 @@ $(document).ready(function () {
     $("#backgroundModalHistoria").css("color", 'red');
     $('body').css('background-color', 'lightgray');
     modalKeydown();
-    
+
   });
 
   //Evento submit envio formulario.
-  $(document).on('submit', '#formHistoriaPaciente', function(e) {
+  $(document).on('submit', '#formHistoriaPaciente', function (e) {
     e.preventDefault();
     e.stopPropagation();
-  
-    let dataHistoria = $(this).serializeArray();
-    let dataHistoriaRegister = JSON.stringify(dataHistoria);
 
-    console.log(dataHistoriaRegister);
-  
+    let dataHistoria = $(this).serializeArray();
+
+    // let spanPaciente = $('#documentoPacienteHistoria').text();
+    // console.log('Documento del paciente: ' + spanPaciente);
+    // dataHistoria.push({ name: 'documentoPaciente', value: spanPaciente });
+    console.log(dataHistoria);
+
+    let spanPaciente = $('#documentoPacienteHistoria').text();
+    console.log('Documento del paciente: ' + spanPaciente);
+
+    // Agrega el valor del span al array dataHistoria
+    dataHistoria.push({ name: 'pac_id', value: spanPaciente });
+
+    let dataHistoriaRegister = JSON.stringify(dataHistoria);
+    console.log(dataHistoria);
+
     $.ajax({
       type: "POST",
       url: "querys/functionsInsert.php",
@@ -569,7 +580,7 @@ $(document).ready(function () {
         data: dataHistoriaRegister
       },
       dataType: "json",
-      success: function(response) {
+      success: function (response) {
         console.log(response);
         if (response.status === 'success') {
           Swal.fire({
@@ -578,12 +589,12 @@ $(document).ready(function () {
             text: response.message,
             showCloseButton: true,
           });
-  
+
           // Close the modal after success
           closeModal(modalPaciente);  // Ensure modalPaciente is defined somewhere
         }
       },
-      error: function(xhr, status, error) {
+      error: function (xhr, status, error) {
         console.error("Error during the AJAX request: ", error);
         Swal.fire({
           title: "Error",
@@ -596,13 +607,13 @@ $(document).ready(function () {
   });
 
 
-    //Cerrar modal historia
-    $(document).on('click', '#closeModalPaciente', function(e){
-      $("#myModalHistoria").hide();
-      $('body').css('background-color', 'white');
-  
-    });
-  
+  //Cerrar modal historia
+  $(document).on('click', '#closeModalPaciente', function (e) {
+    $("#myModalHistoria").hide();
+    $('body').css('background-color', 'white');
+
+  });
+
 
 
 
