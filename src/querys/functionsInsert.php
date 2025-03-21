@@ -145,7 +145,14 @@ function updatePaciente($formData, $dataLastRow)
 
     try {
 
+        $pdo->beginTransaction();
+
         $pac_docum = (!empty($formData['documento'])) ? trim($formData['documento']) : null;
+        //Valido nuevamente ya que si aplico valor ternario si empty esta vacio el va a guardarme un NULL, no un false. 
+        if ($pac_docum === null) {
+            echo json_encode(["error" => "El documento no puede estar vacío"]);
+            exit();
+        }
         $pac_nombre = trim($formData['nombrePaciente']);
         $pac_apellido = trim($formData['apellidoPaciente']);
         $pac_direccion = trim($formData['direccionPaciente']);
@@ -153,16 +160,64 @@ function updatePaciente($formData, $dataLastRow)
         $pac_email = trim($formData['emailPaciente']);
         $gen_id = trim($formData['genero']);
         $estrato = trim($formData['estrato']);
-        //Valido nuevamente ya que si aplico valor ternario si empty esta vacio el va a guardarme un NULL, no un false. 
-        if ($pac_docum === null) {
-            echo json_encode(["error" => "El documento no puede estar vacío"]);
-            exit();
-        }
+        //Capturo id Hobbies del formulario para comprar si ya están registrados o no.
+        $idHobbies = is_array($formData['hobbies']) ? $formData['hobbies'] : explode(',', $formData['hobbies']);
 
         //Valido que nombre, documento y teléfono no esten vacios.
         if (empty($pac_nombre) || empty($pac_apellido) || empty($pac_telefono)) {
             echo json_encode(['status' => 'error', 'message' => 'faltan datos obligatorios']);
             exit();
+        }
+
+        $selectHobbies = "SELECT 
+            ph.pac_id AS 'idDocumentopaciente',
+            ph.hob_id AS 'idHobbie'
+            FROM paciente_hobbies ph
+            INNER JOIN paciente p ON
+            p.pac_docum = ph.pac_id 
+            WHERE ph.pac_id = :pac_docum";
+
+        $stmSelect = $pdo->prepare($selectHobbies);
+        $stmSelect->bindValue('pac_docum', $pac_docum);
+        $stmSelect->execute();
+
+        $hobbies = $stmSelect->fetchAll(PDO::FETCH_ASSOC);
+
+        //Esta es la consulta que se realizó en base al paciente, para saber cuales son las transacciones que se deben de hacer y cuales no.
+        $hobbiesRegistrados = array_column($hobbies, 'idHobbie');
+
+        $hobbiesParaInsertar = array_diff($idHobbies, $hobbiesRegistrados);
+
+        $hobbiesParaEliminar = array_diff($hobbiesRegistrados, $idHobbies);
+
+
+        if (!empty($hobbiesParaInsertar)) {
+            $insertQuery = "INSERT INTO paciente_hobbies (pac_id, hob_id) VALUES ";
+            $insertValues = [];
+            $params = [];
+
+            foreach ($hobbiesParaInsertar as $index => $hobbie) {
+                $insertValues[] = "(:pac_id, :hob_id$index)";
+                $params[":hob_id$index"] = $hobbie;
+            }
+
+            $insertQuery .= implode(", ", $insertValues);
+            $stmtInsert = $pdo->prepare($insertQuery);
+            $stmtInsert->bindValue(":pac_id", $pac_docum, PDO::PARAM_INT);
+
+            foreach ($params as $key => $value) {
+                $stmtInsert->bindValue($key, $value, PDO::PARAM_INT);
+            }
+
+            $stmtInsert->execute();
+        }
+
+        if (!empty($hobbiesParaEliminar)) {
+            $placeholders = implode(',', array_fill(0, count($hobbiesParaEliminar), '?'));
+            $deleteQuery = "DELETE FROM paciente_hobbies WHERE pac_id = ? AND hob_id IN ($placeholders)";
+            $stmtDelete = $pdo->prepare($deleteQuery);
+
+            $stmtDelete->execute(array_merge([$pac_docum], $hobbiesParaEliminar));
         }
 
         $sql = "UPDATE paciente SET pac_nombre = :pac_nombre,pac_apellido= :pac_apellido, pac_direccion= :pac_direccion, pac_telefono= :pac_telefono,pac_email= :pac_email, gen_id= :gen_id, estr_id = :estr_id WHERE pac_docum = :pac_docum";
@@ -191,12 +246,14 @@ function updatePaciente($formData, $dataLastRow)
 
             return $dataExecute;
         }
+        $pdo->commit();
     } catch (\Throwable $th) {
 
         $dataExecute = [
             "status" => "error",
             "message" => "error al realizar la inserción $th"
         ];
+        $pdo->rollBack();
         return $dataExecute;
     }
     return $dataExecute;
@@ -206,13 +263,6 @@ function newHistory($formData)
 {
 
     global $pdo;
-
-    // if (empty($formData['esfod']) || empty($formData['cilod']) || empty($formData['ejeod']) || empty($formData['diaod'])) {
-    //     echo json_encode(['error' => 'Faltan datos obligatorios']);
-    //     return;
-    // }
-
-
 
     $sql = "INSERT INTO historias (hist_esfod, hist_cilod, hist_ejeod, hist_diaod, hist_esfoi, hist_ciloi, hist_ejeoi, hist_diaoi, hist_recom, hist_motv, pac_id) 
             VALUES (:hist_esfod, :hist_cilod, :hist_ejeod, :hist_diaod, :hist_esfoi, :hist_ciloi, :hist_ejeoi, :hist_diaoi, :hist_recom, :hist_motv, :pac_id)";

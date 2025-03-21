@@ -11,12 +11,12 @@
  * 
  */
 
-$(document).ready(function(){
+$(document).ready(function () {
     $('select').formSelect();  // Inicializa los select de Materialize
     M.updateTextFields(); // Asegura que los campos de texto (input) se muestren correctamente
 
     //Función submit
-    $('#submit').click(function(e){
+    $('#submit').click(function (e) {
 
         e.preventDefault();
 
@@ -31,50 +31,59 @@ $(document).ready(function(){
                 usu_docum: documento,
                 usu_clave: password,
                 rol_id: rol
-
             },
             dataType: "json",
             success: function (info) {
                 console.log(info);
                 if (info.success) {
-
                     Swal.fire({
-                        "title": info.success,
-                        "text": "Bienvenido Sr "+info.usuario,
-                        "icon": 'success',
-                        "showConfirmButton": false,
-                        "timer":2500
-                    })
-                    //Establecer tiempo para redirección.
-                    setTimeout(() => {
-                        Swal.close();
-                        window.location.href = 'src/dashboard.php';
-                    }, 2500);
-                }else if(info.error){
+                        title: "Procesando...",
+                        text: "Espere un momento...",
+                        icon: "info",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        timer: 2500,
+                        didOpen: () => {
+                            //Icono de carga.
+                            Swal.showLoading();
+                        },
+                    }).then(() => {
+                        Swal.fire({
+                            "title": info.success,
+                            "text": "Bienvenido Sr " + info.usuario,
+                            "icon": 'success',
+                            "showConfirmButton": false,
+                            "timer": 2500
+                        }).then(() => {
+                            //Establecer tiempo para redirección.
+                            setTimeout(() => {
+                                Swal.close();
+                                window.location.href = 'src/dashboard.php';
+                            }, 2500);
+                        });
+                    });
+                } else if (info.error) {
                     console.log(info.error);
-                    
                     Swal.fire({
-                        "title": info.error,
-                        "text" : info.error,
-                        "icon" : 'error',
-                        "showConfirmButton": false,
-                        //Implementar html en el sweet Alert.
-                        'html':`
-                        <button type="submit" id="submit" class="btn waves-effect waves-light">Ok</button>`
+                        title: info.error,
+                        text: info.error,
+                        icon: "error",
+                        showConfirmButton: false,
+                        html: `<button type="button" id="submit" class="btn waves-effect waves-light">Ok</button>`
                     });
 
-                    //Evento click para cerrar el modal en caso de datos incorrectos.
-                    $(document).on('click', '#submit', function() {
-                        Swal.close(); //Cierra alerta sweetAlert
+                    $(document).on('click', '#submit', function () {
+                        Swal.close();
                     });
                 }
             },
-            error: function(error,xhr){
+            error: function (error, xhr) {
                 console.log(xhr);
                 Swal.fire(
-                  'heading',
-                  'Erorr al ingresar '+xhr,
-                  'error'
+                    'Error',
+                    'Hubo un problema al iniciar sesión',
+                    'error'
                 );
             }
         });

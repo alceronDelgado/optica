@@ -189,7 +189,9 @@ $(document).ready(function () {
     let dataIdEstrato = parseInt(data.idEstrato);
     let dataIdGenero = data.idGenero;
     //
-    let dataIdHobbies = data.idHobbies ? Object.values(data.idHobbies) : [];
+    let dataIdHobbies = data.idHobbies
+      ? (Array.isArray(data.idHobbies) ? data.idHobbies : data.idHobbies.split(',').map(h => h.trim()))
+      : [];
 
     $("#documentoPaciente").val(data.documento);
     $("#nombrePaciente").val(data.nombrePaciente);
@@ -220,33 +222,27 @@ $(document).ready(function () {
       }
     });
 
-    //Genero
-    // let selectPaciente = $('select[name="genero"]');
+    console.log("Hobbies del paciente (convertidos a array):", dataIdHobbies);
 
-    // let options = selectPaciente.find(`option[value="${dataIdGenero}"]`).length > 0;
-    // if (options) {
-    //   console.log($(`option[value="${dataIdGenero}"]`).trigger('change'))
-    //   selectPaciente.val(dataIdGenero).trigger('change');
-    // }
+    let valuesArray = $('#pacienteGeneroSelect option').map(function () {
+      return $(this).val();
+    }).get();
+    console.log(typeof valuesArray);
+    console.log(typeof dataIdGenero);
 
+    valuesArray.forEach(itemGenero => {
+      console.log(typeof itemGenero);
 
-
-    //Genero TODO: POR ARREGLAR.
-    $('#pacienteGeneroSelect').find('option').each(function () {
-      let valueGenero = $(this).val();  // Obtiene el valor de la opción
-
-      // Si el valor de la opción coincide con el valor de dataIdGenero
-      if ($(this).val() === dataIdGenero) {
+      if (parseInt(itemGenero) === parseInt(dataIdGenero)) {
         console.log('dentro del if.');
-        //$(this).prop('selected', true);
-        //$("#pacienteGeneroSelect option[value="+ dataIdGenero +"]").attr("selected",true);
-        //console.log($(this).prop('selected', true));
 
+        // Selecciona el option correcto
+        $("#pacienteGeneroSelect").val(dataIdGenero);
       }
     });
+    //Debo re inicializar materialize porque materialize no cambia los select de manera dinámica, el los reemplaza.
+    $('select').formSelect();
 
-    //Opción generada por chatGpt
-    //$("#pacienteGeneroSelect").val(data.idGenero);
   });
 
   //Botón para enviar datos a php.
@@ -256,13 +252,24 @@ $(document).ready(function () {
 
     // Capturar datos del formulario
     let dataEdit = form.serializeArray();
+
+    let hobbiesSeleccionados = [];
+
+    $('input[name="hobbies"]:checked').each(function () {
+      hobbiesSeleccionados.push($(this).val());
+    });
+
+    dataEdit.push({ name: "hobbies", value: hobbiesSeleccionados.join(",") });
+
+
     let dataRegister = JSON.stringify(dataEdit);
 
     // Verificar si estamos en modo de edición
     if (editMode) {
 
-      //Lo ideal es usar este formato para poder comparar.
+      console.log(dataRegister);
 
+      //Lo ideal es usar este formato para poder comparar.
       Swal.fire({
         title: "¿Deseas actualizar los datos?",
         showDenyButton: true,
@@ -301,17 +308,6 @@ $(document).ready(function () {
                 console.log('error');
               }
 
-              // if (condition) {
-
-              // }
-
-              // Swal.fire({
-              //   titile: 'success',
-
-              //   option: 'text',
-              //   option: 'success'
-              // });
-
               console.log(response);
             },
             error: function (xhr, error) {
@@ -328,6 +324,7 @@ $(document).ready(function () {
 
     } else {
       // Modo registro (insertar)
+
       Swal.fire({
         title: "¿Estás seguro de agregar este paciente?",
         showDenyButton: true,
@@ -371,9 +368,6 @@ $(document).ready(function () {
                 $("#formPaciente")[0].reset();
 
               }
-
-
-
             },
           });
         }
@@ -421,7 +415,6 @@ $(document).ready(function () {
                 confirmButtonText: "Aceptar"
               });
               myTable.ajax.reload();
-
             } else {
               Swal.fire({
                 title: "Error",
@@ -560,7 +553,7 @@ $(document).ready(function () {
             text: response.message,
             showCloseButton: true,
           });
-          closeModal(modalPaciente); 
+          closeModal(modalPaciente);
           //Reinicio modal después de insertar una historia.
           $('#formHistoriaPaciente')[0].reset();
         }
@@ -576,7 +569,7 @@ $(document).ready(function () {
     });
   });
 
-  $(document).on('click', '#btnDetalleHistoria', function (e){
+  $(document).on('click', '#btnDetalleHistoria', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -608,8 +601,7 @@ $(document).ready(function () {
           $('#btnHistoriaPaciente').hide();
           $('#modalTitleHistoria').text("Detalle Historia Clinica");
           $('body').css('background-color', 'lightgray');
-
-          $('#nombrePacienteHistoria').text(pacienteData.nombre);
+          $('#documentoPacienteHistoria').text(pacienteData.documento);
           $('#nombrePacienteHistoria').text(pacienteData.nombre);
           $('#apellidoPacienteHistoria').text(pacienteData.apellido);
           $('#telefonoPacienteHistoria').text(pacienteData.telefono);
@@ -627,11 +619,9 @@ $(document).ready(function () {
           $('#hist_recom').text(pacienteData.recom);
           modalTitle.text(labelsForm.title);
           modalKeydown();
-        } 
+        }
       }
     });
-        
-
   });
 
 
@@ -642,7 +632,7 @@ $(document).ready(function () {
     $('#formHistoriaPaciente')[0].reset();
     //$('#hist_recom').val('');
     //$('#hist_motv').val('');
-    
+
 
   });
 

@@ -4,10 +4,17 @@
     padding: 0;
 }
 
-#myModalHistoria{
+#myModalHistoria {
     display: none;
+    margin: 0 auto;
+    background-color: white;
+    z-index: 1;
+    width: 70%;
+    height: 100%;
+    border: 1px solid black;
+    left: 60%;
+    top: 50%;
 }
-
 
 :root {
     /* colores */
@@ -17,7 +24,8 @@
     --barra: #b1e8f8;
 }
 
-body, html {
+body,
+html {
     height: 100%;
     margin: 0;
 }
@@ -90,7 +98,8 @@ body, html {
 #closeModal {
     font-size: 40px;
 }
-.closeSpan{
+
+.closeSpan {
     font-size: 40px;
 }
 
@@ -100,14 +109,14 @@ body, html {
 }
 
 /* Text area = definir tamaño por defecto. */
-#motivoVisita{
+#motivoVisita {
     resize: none;
     width: 100%;
     height: 5rem;
     padding: 1.5rem;
 }
 
-.btnDivHistoria{
+.btnDivHistoria {
     display: flex;
     justify-content: space-around;
     margin-top: 1rem;
@@ -119,7 +128,7 @@ body, html {
     .table {
         width: 90%;
         padding: 1rem;
-        transform: translateY(5%);
+        transform: translateY(-10%);
     }
 
     .dt-search {
@@ -129,7 +138,7 @@ body, html {
 
     #menuDrop {
         width: 80%;
-        transform: translateX(-50%) scale(1);
+        transform: translateX(-50%) scale(0.5);
     }
 
     #myModal {
@@ -148,7 +157,7 @@ body, html {
         font-size: 30px;
     }
 
-    .closeSpan{
+    .closeSpan {
         font-size: 30px;
     }
 }
@@ -182,7 +191,8 @@ body, html {
     #closeModal {
         font-size: 25px;
     }
-    .closeSpan{
+
+    .closeSpan {
         font-size: 30px;
     }
 }
@@ -190,22 +200,32 @@ body, html {
 /* Media Queries para pantallas más grandes (por ejemplo, pantallas de escritorio grandes) */
 @media (min-width: 1200px) {
     .table {
-        width: 50%;
+        width: 90%;
+        transform: translateY(-7%);
+    }
+
+    h1 {
+        margin: 0 !important;
+    }
+
+    #modalTitleHistoria {
+        font-size: 2rem;
     }
 
     #menuDrop {
         width: 40%;
     }
-    #myModalHistoria{
+
+    #myModalHistoria {
         display: none;
         margin: 0 auto;
         background-color: white;
         z-index: 1;
-        width: 60%;
-        height: auto;
+        width: 70%;
+        height: 100%;
         border: 1px solid black;
         left: 60%;
         top: 50%;
-        transform: translate(0%, -80%);
+        transform: translateY(-73%);
     }
 }
