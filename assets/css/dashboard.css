@@ -124,7 +124,8 @@ html {
 }
 
 /* Media Queries para dispositivos móviles */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) { */
+@media screen and (min-width: 769px) and (max-width:1199px) {
     .table {
         width: 90%;
         padding: 1rem;
@@ -164,8 +165,10 @@ html {
 
 
 
+
 /* Media Queries para dispositivos muy pequeños, como móviles en orientación vertical */
-@media (max-width: 480px) {
+/* @media (max-width: 480px) { */
+    @media screen and (max-width: 768px) {
     .table {
         width: 95%;
         padding: 0.8rem;
@@ -197,7 +200,7 @@ html {
     }
 }
 
-/* Media Queries para pantallas más grandes (por ejemplo, pantallas de escritorio grandes) */
+/* Media query para tamaños mayores a 1200px */
 @media (min-width: 1200px) {
     .table {
         width: 90%;
@@ -217,15 +220,12 @@ html {
     }
 
     #myModalHistoria {
-        display: none;
-        margin: 0 auto;
-        background-color: white;
-        z-index: 1;
-        width: 70%;
-        height: 100%;
+        width: 80%;
+        height: auto;
         border: 1px solid black;
         left: 60%;
         top: 50%;
         transform: translateY(-73%);
     }
+
 }
