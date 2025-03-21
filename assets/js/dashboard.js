@@ -323,42 +323,55 @@ $(document).ready(function () {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          $.ajax({
-            type: "POST",
-            url: "querys/functionsInsert.php",
-            data: {
-              data: dataRegister,
-              codigo: 1,
+          closeModal(modal);
+          Swal.fire({
+            title: "Registrando...",
+            text: "Por favor espera mientras se registra el paciente.",
+            icon: "info",
+            showConfirmButton: false,
+            willOpen: () => {
+              Swal.showLoading();
             },
-            dataType: "json",
-            success: function (data) {
-              console.log(data);
-              if (data.error) {
-                Swal.fire({
-                  title: "Error",
-                  text: data.error,
-                  icon: "error",
-                  showConfirmButton: true,
-                  confirmButtonText: "Aceptar"
-                });
-
-              } else {
-                Swal.fire({
-                  title: "Registro Exitoso",
-                  text: data.success,
-                  icon: "success",
-                  showConfirmButton: true,
-                  confirmButtonText: "Aceptar"
-                });
-
-
-                closeModal(modal);
-                myTable.ajax.reload();
-                $("#formPaciente")[0].reset();
-
-              }
-            },
+            timer: 2000,
+            timerProgressBar: true,
+          }).then(()=>{
+            setTimeout(() => {
+              $.ajax({
+                type: "POST",
+                url: "querys/functionsInsert.php",
+                data: {
+                  data: dataRegister,
+                  codigo: 1,
+                },
+                dataType: "json",
+                success: function (data) {
+                  console.log(data);
+                  if (data.error) {
+                    Swal.fire({
+                      title: "Error",
+                      text: data.error,
+                      icon: "error",
+                      showConfirmButton: true,
+                      confirmButtonText: "Aceptar"
+                    });
+                  } else {
+                    Swal.fire({
+                      title: "Registro Exitoso",
+                      text: data.success,
+                      icon: "success",
+                      showConfirmButton: true,
+                      confirmButtonText: "Aceptar"
+                    });
+                    myTable.ajax.reload();
+                    $("#formPaciente")[0].reset();
+                  }
+                },
+              });
+            }, 1500);
+            
           });
+
+          
         }
       })
         .catch((err) => {
