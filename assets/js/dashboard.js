@@ -101,8 +101,6 @@ $(document).ready(function () {
     //let codigoModalPaciente = 1;
     //let codigoModalHistoria = 2;
 
-
-
     modalTitle.text(labelsForm.title);
     $("#labelDocumento").text(labelsForm.labelDocumento);
     $("#labelNombre").text(labelsForm.labelNombre);
@@ -116,15 +114,12 @@ $(document).ready(function () {
 
     $(".backgroundModal").css("color", backGroundModal);
 
-
     // if (codigoModal === 2) {
     //   modalTitle.text(labelsForm.title);
     //   btn.text(labelsForm.textBtn);
     //   $(".backgroundModal").css("color", backGroundModal);
 
     // }
-
-
   }
 
   closeBtn.on("click", function (e) {
@@ -165,7 +160,6 @@ $(document).ready(function () {
     let radioButtonIds = [];
     lastData = data;
 
-
     //btn.text('Guardar cambios');
 
     openModal(modal);
@@ -190,7 +184,9 @@ $(document).ready(function () {
     let dataIdGenero = data.idGenero;
     //
     let dataIdHobbies = data.idHobbies
-      ? (Array.isArray(data.idHobbies) ? data.idHobbies : data.idHobbies.split(',').map(h => h.trim()))
+      ? Array.isArray(data.idHobbies)
+        ? data.idHobbies
+        : data.idHobbies.split(",").map((h) => h.trim())
       : [];
 
     $("#documentoPaciente").val(data.documento);
@@ -218,31 +214,25 @@ $(document).ready(function () {
 
       if (dataIdHobbies.includes(checkboxButtonValue)) {
         $(this).prop("checked", true);
-
       }
     });
 
-    console.log("Hobbies del paciente (convertidos a array):", dataIdHobbies);
+    let valuesArray = $("#pacienteGeneroSelect option")
+      .map(function () {
+        return $(this).val();
+      })
+      .get();
 
-    let valuesArray = $('#pacienteGeneroSelect option').map(function () {
-      return $(this).val();
-    }).get();
-    console.log(typeof valuesArray);
-    console.log(typeof dataIdGenero);
-
-    valuesArray.forEach(itemGenero => {
-      console.log(typeof itemGenero);
-
+    valuesArray.forEach((itemGenero) => {
       if (parseInt(itemGenero) === parseInt(dataIdGenero)) {
-        console.log('dentro del if.');
+        console.log("dentro del if.");
 
         // Selecciona el option correcto
         $("#pacienteGeneroSelect").val(dataIdGenero);
       }
     });
     //Debo re inicializar materialize porque materialize no cambia los select de manera dinámica, el los reemplaza.
-    $('select').formSelect();
-
+    $("select").formSelect();
   });
 
   //Botón para enviar datos a php.
@@ -260,7 +250,6 @@ $(document).ready(function () {
     });
 
     dataEdit.push({ name: "hobbies", value: hobbiesSeleccionados.join(",") });
-
 
     let dataRegister = JSON.stringify(dataEdit);
 
@@ -376,8 +365,6 @@ $(document).ready(function () {
           console.error(err);
         });
     }
-
-
   });
 
   //Eliminar paciente
@@ -387,108 +374,101 @@ $(document).ready(function () {
     let data = myTable.row(rw).data();
     let documento = data.documento;
 
-    swal.fire({
-      title: "",
-      text: "¿Esta seguro de eliminar este paciente?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Eliminar",
-    }).then(respuesta => {
-      if (respuesta.isConfirmed) {
-        $.ajax({
-          type: "POST",
-          url: "querys/functionsInsert.php",
-          datatype: "json",
-          data: {
-            codigo: 3,
-            documento: documento,
-          },
-          dataType: "json",
-          success: function (data) {
-            console.log(data);
-            if (data.success) {
-              Swal.fire({
-                title: "¡Exito!",
-                text: data.success,
-                icon: "success",
-                showConfirmButton: true,
-                confirmButtonText: "Aceptar"
-              });
-              myTable.ajax.reload();
-            } else {
-              Swal.fire({
-                title: "Error",
-                text: data.error,
-                icon: "error",
-                showConfirmButton: true,
-                confirmButtonText: "Aceptar"
-              });
-            }
-          },
-        });
-      }
-
-    });
-
+    swal
+      .fire({
+        title: "",
+        text: "¿Esta seguro de eliminar este paciente?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Eliminar",
+      })
+      .then((respuesta) => {
+        if (respuesta.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "querys/functionsInsert.php",
+            datatype: "json",
+            data: {
+              codigo: 3,
+              documento: documento,
+            },
+            dataType: "json",
+            success: function (data) {
+              console.log(data);
+              if (data.success) {
+                Swal.fire({
+                  title: "¡Exito!",
+                  text: data.success,
+                  icon: "success",
+                  showConfirmButton: true,
+                  confirmButtonText: "Aceptar",
+                });
+                myTable.ajax.reload();
+              } else {
+                Swal.fire({
+                  title: "Error",
+                  text: data.error,
+                  icon: "error",
+                  showConfirmButton: true,
+                  confirmButtonText: "Aceptar",
+                });
+              }
+            },
+          });
+        }
+      });
   });
 
   //Cerrar sesión
-  $('#close').on('click', function (f) {
+  $("#close").on("click", function (f) {
     f.preventDefault();
 
     Swal.fire({
       title: "¿Deseas salir de la aplicación?",
       draggable: true,
-      icon: 'info',
+      icon: "info",
       showDenyButton: true,
       showCancelButton: false,
       confirmButtonText: "Si",
-      denyButtonText: `No`
+      denyButtonText: `No`,
     }).then((result) => {
       if (result.isConfirmed) {
-
         Swal.fire({
-          title: 'Cerrando sesión...',
-          text: 'Por favor espera mientras se cierra tu sesión.',
-          icon: 'info',
+          title: "Cerrando sesión...",
+          text: "Por favor espera mientras se cierra tu sesión.",
+          icon: "info",
           showConfirmButton: false,
           willOpen: () => {
             Swal.showLoading();
-          }
+          },
         });
 
         $.ajax({
-          url: 'querys/sessionDestroy.php',
-          type: 'POST',
+          url: "querys/sessionDestroy.php",
+          type: "POST",
           success: function (data) {
             if (data) {
-
               Swal.fire({
-                title: '¡Hasta luego!',
-                text: 'Has cerrado sesión exitosamente.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
+                title: "¡Hasta luego!",
+                text: "Has cerrado sesión exitosamente.",
+                icon: "success",
+                confirmButtonText: "Aceptar",
               }).then(() => {
                 window.location.replace("../index.php");
               });
             }
-
-          }
-
+          },
         });
       } else if (result.isDenied) {
         Swal.close();
       }
-
     });
-
   });
 
-
   /***
-   * 
+   *
    * Historia Paciente
-   * 
+   *
    */
 
   //Abrir modal historia.
@@ -499,39 +479,34 @@ $(document).ready(function () {
     let dataPac = $(this).closest("tr");
     let data = myTable.row(dataPac).data();
 
-    $('#documentoPacienteHistoria').text(data.documento);
-    $('#nombrePacienteHistoria').text(data.nombrePaciente);
-    $('#apellidoPacienteHistoria').text(data.apellidoPaciente);
-    $('#telefonoPacienteHistoria').text(data.telefonoPaciente);
-    $('#generoPacienteHistoria').text(data.genero);
-    $('#estratoPacienteHistoria').text(data.estrato);
-
-    console.log(data);
-
+    $("#documentoPacienteHistoria").text(data.documento);
+    $("#nombrePacienteHistoria").text(data.nombrePaciente);
+    $("#apellidoPacienteHistoria").text(data.apellidoPaciente);
+    $("#telefonoPacienteHistoria").text(data.telefonoPaciente);
+    $("#generoPacienteHistoria").text(data.genero);
+    $("#estratoPacienteHistoria").text(data.estrato);
     $("#myModalHistoria").show();
-    $('#btnHistoriaPaciente').text("Guardar");
-    $('#modalTitleHistoria').text("Historia Clinica");
+    $("#btnHistoriaPaciente").text("Guardar");
+    $("#modalTitleHistoria").text("Historia Clinica");
     modalTitle.text(labelsForm.title);
-    $("#backgroundModalHistoria").css("color", 'red');
-    $('body').css('background-color', 'lightgray');
+    $("#backgroundModalHistoria").css("color", "red");
+    $("body").css("background-color", "lightgray");
+    $("#btnHistoriaPaciente").show();
     modalKeydown();
-
   });
 
   //Evento submit envio formulario.
-  $(document).on('submit', '#formHistoriaPaciente', function (e) {
+  $(document).on("submit", "#formHistoriaPaciente", function (e) {
     e.preventDefault();
     e.stopPropagation();
 
     let dataHistoria = $(this).serializeArray();
 
-    console.log(dataHistoria);
-
-    let spanPaciente = $('#documentoPacienteHistoria').text();
-    console.log('Documento del paciente: ' + spanPaciente);
+    let spanPaciente = $("#documentoPacienteHistoria").text();
+    console.log("Documento del paciente: " + spanPaciente);
 
     // Agrega el valor del span al array dataHistoria
-    dataHistoria.push({ name: 'pac_id', value: spanPaciente });
+    dataHistoria.push({ name: "pac_id", value: spanPaciente });
 
     let dataHistoriaRegister = JSON.stringify(dataHistoria);
     console.log(dataHistoria);
@@ -541,12 +516,12 @@ $(document).ready(function () {
       url: "querys/functionsInsert.php",
       data: {
         codigo: 4,
-        data: dataHistoriaRegister
+        data: dataHistoriaRegister,
       },
       dataType: "json",
       success: function (response) {
         console.log(response);
-        if (response.status === 'success') {
+        if (response.status === "success") {
           Swal.fire({
             title: "Éxito",
             icon: "success",
@@ -555,7 +530,7 @@ $(document).ready(function () {
           });
           closeModal(modalPaciente);
           //Reinicio modal después de insertar una historia.
-          $('#formHistoriaPaciente')[0].reset();
+          $("#formHistoriaPaciente")[0].reset();
         }
       },
       error: function (xhr, status, error) {
@@ -565,11 +540,11 @@ $(document).ready(function () {
           text: "Error en la consulta",
           showCloseButton: true,
         });
-      }
+      },
     });
   });
 
-  $(document).on('click', '#btnDetalleHistoria', function (e) {
+  $(document).on("click", "#btnDetalleHistoria", function (e) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -577,13 +552,13 @@ $(document).ready(function () {
     let dataHistoria = myTable.row(data).data();
     let documentoPaciente = dataHistoria.documento;
     $.ajax({
-      url: 'querys/functionsSelectsTwo.php',
-      type: 'POST',
+      url: "querys/functionsSelectsTwo.php",
+      type: "POST",
       data: {
         codigoSelect: 2,
-        documento: documentoPaciente
+        documento: documentoPaciente,
       },
-      dataType: 'json',
+      dataType: "json",
       success: function (data) {
         let pacienteData = data.data.data;
 
@@ -598,47 +573,40 @@ $(document).ready(function () {
 
         if (data.data.status === true) {
           $("#myModalHistoria").show();
-          $('#btnHistoriaPaciente').hide();
-          $('#modalTitleHistoria').text("Detalle Historia Clinica");
-          $('body').css('background-color', 'lightgray');
-          $('#documentoPacienteHistoria').text(pacienteData.documento);
-          $('#nombrePacienteHistoria').text(pacienteData.nombre);
-          $('#apellidoPacienteHistoria').text(pacienteData.apellido);
-          $('#telefonoPacienteHistoria').text(pacienteData.telefono);
-          $('#generoPacienteHistoria').text(pacienteData.genero);
-          $('#estratoPacienteHistoria').text(pacienteData.estrato);
-          $('#esferaOd').val(pacienteData.esfod);
-          $('#cilindOD').val(pacienteData.cilod);
-          $('#ejeOd').val(pacienteData.ejeod);
-          $('#esferaId').val(pacienteData.esfoid);
-          $('#cilindOI').val(pacienteData.ciloi);
-          $('#ejeId').val(pacienteData.ejeoi);
-          $('#diagOi').val(pacienteData.diaoi);
-          $('#diagOd').val(pacienteData.diaod);
-          $('#hist_motv').text(pacienteData.motv);
-          $('#hist_recom').text(pacienteData.recom);
+          $("#btnHistoriaPaciente").hide();
+          $("#modalTitleHistoria").text("Detalle Historia Clinica");
+          $("body").css("background-color", "lightgray");
+          $("#documentoPacienteHistoria").text(pacienteData.documento);
+          $("#nombrePacienteHistoria").text(pacienteData.nombre);
+          $("#apellidoPacienteHistoria").text(pacienteData.apellido);
+          $("#telefonoPacienteHistoria").text(pacienteData.telefono);
+          $("#generoPacienteHistoria").text(pacienteData.genero);
+          $("#estratoPacienteHistoria").text(pacienteData.estrato);
+          $("#esferaOd").val(pacienteData.esfod);
+          $("#cilindOD").val(pacienteData.cilod);
+          $("#ejeOd").val(pacienteData.ejeod);
+          $("#esferaId").val(pacienteData.esfoid);
+          $("#cilindOI").val(pacienteData.ciloi);
+          $("#ejeId").val(pacienteData.ejeoi);
+          $("#diagOi").val(pacienteData.diaoi);
+          $("#diagOd").val(pacienteData.diaod);
+          $("#hist_motv").text(pacienteData.motv);
+          $("#hist_recom").text(pacienteData.recom);
           modalTitle.text(labelsForm.title);
           modalKeydown();
         }
-      }
+        
+      },
     });
   });
 
-
   //Cerrar modal historia
-  $(document).on('click', '#closeModalPaciente', function (e) {
+  $(document).on("click", "#closeModalPaciente", function (e) {
     $("#myModalHistoria").hide();
-    $('body').css('background-color', 'white');
-    $('#formHistoriaPaciente')[0].reset();
+    $("body").css("background-color", "white");
+    $("#formHistoriaPaciente")[0].reset();
+
     //$('#hist_recom').val('');
     //$('#hist_motv').val('');
-
-
   });
-
-
-
-
-
-
 });

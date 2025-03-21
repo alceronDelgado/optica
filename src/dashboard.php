@@ -217,22 +217,26 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
             <?php } ?>
           </div>
           <!-- Genero -->
-          <div class="col s6">
+          <div class="input-field col s6">
             <label for='pacienteGeneroSelect' class='labelText'>Genero</label>
-            <select name='genero' id='pacienteGeneroSelect'>
+            <select name='genero' id='pacienteGeneroSelect' class="">
               <!-- <option value='0'>Seleccione un genero</option> -->
               <?php
               $dataGeneros = selectGeners();
+
               foreach ($dataGeneros as $generosRow) {
+
               ?>
+
                 <option name="" class="generos" value="<?php echo $generosRow['genero'] ?>">
                   <?php echo $generosRow['nombreGenero']; ?>
                 </option>
-              <?php  } ?>
+              <?php  }
+              ?>
             </select>
-
-
           </div>
+
+
           <!-- Hobbies -->
           <div class="col row s3">
             <label for="labelHobbies" id="" class="labelText col s12 center-align">Hobbies:</label>
@@ -267,6 +271,7 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
 
   <?php require_once '../assets/templates/imports.php'; ?>
   <script src="../assets/js/dashboard.js"></script>
+  <script src="../assets/js/index.js"></script>
 </body>
 
 </html>
