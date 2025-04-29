@@ -1,13 +1,13 @@
-# Activar el motor de reescritura
 RewriteEngine On
 
-# Deshabilitar el listado de directorios
-Options -Indexes
+# Si la URL termina en /optica/, redirige automáticamente a /optica/public/
+RewriteCond %{REQUEST_URI} ^/optica/?$
+RewriteRule ^$ public/ [L]
 
-# Redirigir cualquier solicitud al directorio 'public' (sin entrar en un bucle infinito)
-RewriteCond %{REQUEST_URI} !^/public/
-RewriteRule ^$ /public/ [L]
-RewriteRule ^(.*)$ /public/$1 [L]
+# Alternativamente, puedes redirigir directamente al index.php
+# RewriteRule ^$ public/index.php [L]
 
-# Definir el archivo de índice en la carpeta public
-DirectoryIndex /public/index.php
+# Si acceden a /optica/ o cualquier cosa que no sea archivo real, mándalo al public/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/$1 [L]
