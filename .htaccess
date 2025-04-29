@@ -1,15 +1,13 @@
 # Activar el motor de reescritura
 RewriteEngine On
 
-# Definir el archivo de índice
-DirectoryIndex public/index.php
+# Deshabilitar el listado de directorios
+Options -Indexes
 
-# Si la URL es vacía (solamente dominio o "/"), redirigir a public/
-RewriteRule ^$ public/ [L]
+# Redirigir cualquier solicitud al directorio 'public' (sin entrar en un bucle infinito)
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^$ /public/ [L]
+RewriteRule ^(.*)$ /public/$1 [L]
 
-# Si hay una solicitud que no es un archivo o directorio real, redirigirla a public/index.php
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ public/index.php [QSA,L]
-
-
+# Definir el archivo de índice en la carpeta public
+DirectoryIndex /public/index.php
