@@ -1,15 +1,14 @@
 <?php
 
-session_start();
-include_once '../config/conn.php';
-// include_once 'querys/functionsInsert.php';
-include_once 'querys/functionsSelects.php';
+// session_start();
+// include_once '../config/conn.php';
+// include_once 'querys/functionsSelects.php';
 
-if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['rolNombre'])) {
+// if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['rolNombre'])) {
 
-  header("location:../index.php");
-  exit;
-}
+//   header("location:../index.php");
+//   exit;
+// }
 
 ?>
 <!DOCTYPE html>
@@ -28,10 +27,10 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
   <div class="row" id="spanId">
     <div class="col s3 offset-5">
       <span class="flow-text highlight">Bienvenido:
-        <?php echo $_SESSION['userName']; ?>
+        <?php // echo $_SESSION['userName']; ?>
       </span>
       <span class="flow-text highlight">Rol:
-        <?php echo $_SESSION['rolNombre']; ?>
+        <?php // echo $_SESSION['rolNombre']; ?>
       </span>
     </div>
   </div>
@@ -67,7 +66,7 @@ if (empty($_SESSION['userName']) || empty($_SESSION['rol']) || empty($_SESSION['
   </div>
 
   
-  <?php require_once '../assets/templates/imports.php'; ?>
+  <?php // require_once '../assets/templates/imports.php'; ?>
   <script src="../assets/js/dashboard.js"></script>
 </body>
 
