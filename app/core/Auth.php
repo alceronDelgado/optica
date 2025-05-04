@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/app/config/conn.php';
+require_once __DIR__ . '/../config/conn.php';
 //Esta clase debe de validar si los datos que ingreso son iguales a los de la base de datos.
 
 //Clase que va a servir para autenticar los datos ingresados por el usuario.

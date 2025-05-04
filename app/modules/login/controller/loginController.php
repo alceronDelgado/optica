@@ -1,14 +1,24 @@
 <?php
+
+/**
+ * funciones de la clase.
+ * login() = debe de mostrar la vista de login
+ * checkCredencialts() = función para validar que los datos digitados x el usuario y los que se encuentran en la base de datos son iguales para re direccionar a dashboard. que en este caso es index.php
+ * crearSession() = función para crear la sesión.
+ * cerrarSesion() = función para cerrar la sesión (debe de ser creada en el archivo Sessions.php)
+ * 
+ * 
+ * 
+ */
+
 //Aca debe de ir todo los elementos para validar la información.
 //Debo capturar la información de los datos y retornarlos para redirigir al dashboard.
-include_once __DIR__ . '/app/core/Auth.php';
-
+include_once __DIR__ . '/../../../core/Auth.php';
+include_once __DIR__ . '/../../../core/renderView.php';
 $userInput = $_POST['usu_docum'];
 $userPassword = $_POST['usu_clave'];
 $userRol = $_POST['rol_id'];
 
-echo 'hello world controller login';
-echo "Controlador LOGIN cargado correctamente.";
 
 if (empty($userInput) || empty($userPassword) || empty($userRol)) {
   return false;
@@ -27,4 +37,27 @@ if ($auth->checkCredentials()) {
   exit();
 } else {
   //Muestro un mensaje de error.
+}
+
+class LoginController{
+  private $userInput;
+  private $userPassword;
+  private $userRol;
+
+  private array $namesModules;
+
+
+  public function __construct() {
+    //Por defecto, apenas se haga la instancia, me debe de traer el formulario.
+    $this->login();
+  }
+
+  //Me muestra el login
+  public function login(){
+    $this->namesModules = RenderView::mapViews();
+    RenderView::renderView('login','loginFormViews.php');
+    
+  }
+
+
 }
