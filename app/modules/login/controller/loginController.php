@@ -65,7 +65,7 @@ class LoginController
     if ($head = RenderView::renderHelpers('head.php'))
       include $head;
 
-    if ($view = RenderView::renderView('login', 'loginFormViews.php'))
+    if ($view = RenderView::renderView('login', 'loginFormViews.php',$data))
       include $view;
 
     // Renderiza la parte final de la estructura html junto a sus js
