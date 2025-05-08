@@ -1,5 +1,7 @@
 <?php
 
+require_once 'renderView.php';
+
 /**
  * Summary of GetUrl
  * El enfoque de esta clase es reemplazar la url y que se muestre una sola url, buscar como implementarlo usando urls amigables.
@@ -22,15 +24,39 @@ class Url{
 
         $url = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);
         $segments = explode('/', trim($url, '/'));
+        
         return $segments[1]??'login';
     }
+
+    public function import(){
+        $render = new RenderView();
+
+        $path = __DIR__ . '/app/helpers/';
+        $url = parse_url($path,PHP_URL_PATH);
+        $req = explode('/', trim($url, '/'));
+
+    }
+
 
 
 }
 
 
+//$moduleHelpers = new RenderView();
+
+//$url = new Url();
+//var_dump($url::mapImports());
 
 
+?>
+
+
+<?php
+
+/**
+ * ESTA función comentada me permite realizar el reemplazo de la url, por arreglar.
+ * 
+ */
 // public function replaceUrl(String $module,String $file,String $accion){
 //     $this->module = $module;
 //     $this->file = $file;
@@ -58,6 +84,5 @@ class Url{
 
 //     return $newUrl;
 // }
-
 
 ?>

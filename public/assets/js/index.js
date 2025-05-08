@@ -1,91 +1,27 @@
-/**
- * user : 29114652
- * password: opt29
- * 
- * 
- * user: 14362442
- * password: oft14
- * 
- * user: 63453452
- * password: re6345
- * 
- */
+import {reExpresion} from './modules/login/validateInfo.js';
 
-$(document).ready(function () {
-    $('select').formSelect();  // Inicializa los select de Materialize
-    M.updateTextFields(); // Asegura que los campos de texto (input) se muestren correctamente
+let form = document.getElementById('formLogin');
 
-    //Función submit
-    $('#submit').click(function (e) {
+let usuario = document.getElementById('usu_docum').value;
+let password = document.getElementById('usu_docum').value;
+let rol = document.getElementById('rol').value;
 
-        e.preventDefault();
 
-        let rol = $('#rol_id').val();
-        let documento = $('#usu_docum').val();
-        let password = $('#usu_clave').val();
+form.addEventListener('submit', (e) =>{
+    e.preventDefault();
+    e.stopPropagation();
 
-        $.ajax({
-            type: "POST",
-            url: "src/querys/login.php",
-            data: {
-                usu_docum: documento,
-                usu_clave: password,
-                rol_id: rol
-            },
-            dataType: "json",
-            success: function (info) {
-                console.log(info);
-                if (info.success) {
-                    Swal.fire({
-                        title: "Procesando...",
-                        text: "Espere un momento...",
-                        icon: "info",
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        showConfirmButton: false,
-                        timer: 2500,
-                        didOpen: () => {
-                            //Icono de carga.
-                            Swal.showLoading();
-                        },
-                    }).then(() => {
-                        Swal.fire({
-                            "title": info.success,
-                            "text": "Bienvenido Sr " + info.usuario,
-                            "icon": 'success',
-                            "showConfirmButton": false,
-                            "timer": 2500
-                        }).then(() => {
-                            //Establecer tiempo para redirección.
-                            setTimeout(() => {
-                                Swal.close();
-                                window.location.href = 'src/dashboard.php';
-                            }, 2500);
-                        });
-                    });
-                } else if (info.error) {
-                    console.log(info.error);
-                    Swal.fire({
-                        title: info.error,
-                        text: info.error,
-                        icon: "error",
-                        showConfirmButton: false,
-                        html: `<button type="button" id="submit" class="btn waves-effect waves-light">Ok</button>`
-                    });
+    const form = new FormData(form);
+    let data = form.entries();
+    console.log(data);
+    let arr = [];
+    for ([usuario,password,rol] of data) {
+        arr.push(data);
+        console.log(arr);
+    }
 
-                    $(document).on('click', '#submit', function () {
-                        Swal.close();
-                    });
-                }
-            },
-            error: function (error, xhr) {
-                console.log(xhr);
-                Swal.fire(
-                    'Error',
-                    'Hubo un problema al iniciar sesión',
-                    'error'
-                );
-            }
-        });
-    });
-});
+    //La idea es cambiar el span según la vista de la infomación.
+    reExpresion.validateData(arr)
+
+
+})
