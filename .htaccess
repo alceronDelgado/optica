@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Si la URL termina en /optica/, redirige automáticamente a /optica/public/
+RewriteCond %{REQUEST_URI} ^/optica/?$
+RewriteRule ^$ public/ [L]
+
+# Alternativamente, puedes redirigir directamente al index.php
+# RewriteRule ^$ public/index.php [L]
+
+# Si acceden a /optica/ o cualquier cosa que no sea archivo real, mándalo al public/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/$1 [L]
