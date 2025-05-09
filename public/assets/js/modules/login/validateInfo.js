@@ -1,10 +1,10 @@
 //Todo: modificar función que me permita validar los campos, su enfoque es eliminar los espacios en blanco y 
-export const reExpresion = () => {
+const reExpresion = () => {
     let spanDocu = document.getElementById('spanDocu');
     let inputDocum = document.querySelector('#inputDocum');
     let inputPassword = document.querySelector('#inputPassword');
     
-    inputDocum.addEventListener('onChange', function () {
+    inputDocum.addEventListener('change', function () {
         if (!validarData(data)) {
             console.log(data);
             
@@ -14,7 +14,7 @@ export const reExpresion = () => {
     });
 }
 
-export const validateData = (data = []) =>{
+export const validateData = () =>{
     let regex = /[a-zA-Z]+/g;
     //la idea de aca es validar la expresión regular e implementar el dentro de un div un span con el texto de que diga que no es optimo este genero.
     let regexNumber = /[0-1]+/g;
@@ -28,6 +28,5 @@ export const validateData = (data = []) =>{
 
     
 export default {
-    reExpresion,
     validateData
 }
