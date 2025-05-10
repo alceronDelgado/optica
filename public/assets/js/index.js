@@ -1,24 +1,45 @@
-import { reExpresion } from "./modules/login/validateInfo.js";
+import { validateData } from "./modules/login/validateInfo.js";
 
-let form = document.getElementById("formLogin");
+document.addEventListener("DOMContentLoaded", function () {
+  let form = document.getElementById("formLogin");
+  let usuario = document.querySelector("#usu_email");
+  let password = document.querySelector("#usu_clave");
+  let rol = document.querySelector("#rol_id");
+  let usuarioTye = usuario.type;
+  let passwordTye = password.type;
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+  usuario.addEventListener("change", (e) => {
+    let usuarioDt = usuario.value;
+    let objUsuario = e.target.id;
+    const objData = {
+      objUsuario: [usuarioTye, usuarioDt,objUsuario]
+    };
+    validateData(objData);
+  });
 
-  let usuario = document.getElementById("usu_docum").value;
-  let password = document.getElementById("usu_docum").value;
-  let rol = document.getElementById("rol").value;
+  password.addEventListener("change",(f)=>{
+    let passwordDt = password.value;
+    let objPassword = f.target.id;
+    const objData = {
+      objPassword: [passwordTye,passwordDt,objPassword]
+    }
 
-  const form = new FormData(form);
-  let data = form.entries();
-  console.log(data);
-  let arr = [];
-  for ([usuario, password, rol] of data) {
-    arr.push(data);
-    console.log(arr);
-  }
+    validateData(objData);
 
-  //La idea es cambiar el span según la vista de la infomación.
-  reExpresion.validateData(arr);
+  });
+
+  // let valuesAndKeys = [];
+
+  // valuesAndKeys.push([usuarioTye, usuarioDt]);
+  // //console.log(valuesAndKeys);
+  // valuesAndKeys.push([passwordTye, passwordDt]);
+  // //console.log(valuesAndKeys);
+
+  // for (let index = 0; index < keys.length; index++) {
+  //   const element = keys[index];
+  //   dtaObj[[element]] = valuesAndKeys[index];
+  // }
+
+  // //La idea es cambiar el span según la vista de la infomación.
+  //validateData(dtaObj);
 });

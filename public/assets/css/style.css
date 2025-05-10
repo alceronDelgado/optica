@@ -49,9 +49,6 @@ body,html{
         text-align: center;
     }
 
-
-
-
     .form{
 
     width: 300px; 
@@ -78,6 +75,13 @@ body,html{
         height: 300px;
         border-radius: 50%;
     }
+
+
+    #spanEmail, #spanPassword{
+        font-size: 1rem;
+    }
+
+
 
 }
 

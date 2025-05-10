@@ -14,7 +14,6 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <script type="module" src="public/assets/js/index.js"></script>
-
 </body>
 
 </html>
