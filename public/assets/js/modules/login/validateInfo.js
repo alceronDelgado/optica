@@ -1,7 +1,7 @@
 const obje = {
   number: /^[0-9]{6,}$/,
   password: /^[a-zA-Z0-9@#%!()]{3,}$/,
-  email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  email: /^[a-zA-Z0-9._%+-]{4,12}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 };
 
 //Todo: modificar función que me permita validar los campos, su enfoque es eliminar los espacios en blanco y
@@ -10,7 +10,7 @@ const addText = (result, inputSelect, inputType) => {
   //Si result es igual a false, entonces implementar el innerText, si es true, no.
   if (!result) {
     if (inputType === "email") {
-      spanElement.textContent = 'Email no valido.';
+      spanElement.textContent = 'Email no valido, minimo 4 caracteres, máximo 12 antes del arroba (@)';
     }
         
     if (inputType === 'password') {

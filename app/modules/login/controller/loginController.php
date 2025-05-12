@@ -15,6 +15,7 @@
 //Debo capturar la información de los datos y retornarlos para redirigir al dashboard.
 include_once __DIR__ . '/../../../core/Auth.php';
 include_once __DIR__ . '/../../../core/renderView.php';
+include_once __DIR__ . '/../../roles/model/rol.php';
 
 //$userInput = $_POST['usu_docum'];
 //$userPassword = $_POST['usu_clave'];
@@ -59,18 +60,26 @@ class LoginController
   //Me muestra el login
   public function login()
   {
+
+    $rol = new Rol();
+    $dataRol = $rol->fetchRol();
+
+
     $this->namesModules = RenderView::mapViews();
     //Renderiza el head de la página.
 
-    if ($head = RenderView::renderHelpers('head.php'))
-      include $head;
-
-    if ($view = RenderView::renderView('login', 'loginFormViews.php'))
-      include $view;
+    if ($head = RenderView::renderHelpers('head.php'))  include $head;
+    
+      /**
+       * $dataRol = es el arreglo que me sirve para manejar la data del formulario
+       * 
+       */
+    if ($view = RenderView::renderView('login', 'loginFormViews.php',$dataRol)) include $view;
+      
 
     // Renderiza la parte final de la estructura html junto a sus js
-    if ($imports = RenderView::renderHelpers('imports.php'))
-      include $imports;
+    if ($imports = RenderView::renderHelpers('imports.php')) include $imports;
+      
     exit();
   }
 
