@@ -1,7 +1,8 @@
-import { validateData } from "./modules/login/validateInfo.js";
-import { dataFetch } from "./modules/login/fetch.js";
+import { validateData } from "./core/validateInfo.js";
+import { dataFetch } from "./core/fetch.js";
+import { succesAlt } from "./core/alerts.js";
 document.addEventListener("DOMContentLoaded", function () {
-  let form = document.getElementById("formLogin");
+  let formLogin = document.querySelector('#formLogin');
   let usuario = document.querySelector("#usu_email");
   let password = document.querySelector("#usu_clave");
   let rol = document.querySelector("#rol_id");
@@ -23,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const objData = {
       objPassword: [passwordTye, passwordDt, objPassword],
     };
-
     validateData(objData);
   });
 
@@ -46,6 +46,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //Inicializar los elementos select. Esto es importante porque materialize pide renderizar los input.
     M.FormSelect.init(rolInput);
+
+
+  });
+
+  //Evento submit del formulario.
+  formLogin.addEventListener("submit", (f)=>{
+    f.preventDefault();
+    f.stopPropagation();
+    const form = new FormData(formLogin);
+    const data = Object.fromEntries(form.entries());
+
+    dataFetch("app/api/getUser.php", 'POST',data);
 
 
   });

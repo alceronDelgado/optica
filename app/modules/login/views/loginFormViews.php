@@ -20,7 +20,7 @@
         <!-- Contenedor del Formulario -->
         <div class="col s12 m6">
             <span class="col s12 center-align">Iniciar sesión</span>
-            <form action="#" method="post" id="formLogin" class="">
+            <form action="" method="post" id="formLogin" class="">
                 <div class="input-field col s12">
                     <!-- La idea es renderizarlos desde js -->
                     <select name="rolesId" id="rol_ids" class="">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="buttom input-field col s12 center-align">
-                    <button type="submit" id="submit" class="btn waves-effect waves-light">ingresar</button>
+                    <button type="submit" id="submitLogin" class="btn waves-effect waves-light">ingresar</button>
                 </div>
             </form>
         </div>

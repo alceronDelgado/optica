@@ -1,3 +1,10 @@
+/**
+ * @param {String} url - url en donde vamos a solicitar los recursos que vamos a utilizar.
+ * @param {String} method - método de envio [GET, PUT,PULL,POST];
+ * @returns {Promise<object>} - Respuesta del json después de ejecutar la función.
+ * 
+ * 
+ */
 export const dataFetch = async (url, method = "GET", data = null) => {
   try {
     const options = {

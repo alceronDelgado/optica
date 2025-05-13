@@ -17,10 +17,6 @@ include_once __DIR__ . '/../../../core/Auth.php';
 include_once __DIR__ . '/../../../core/renderView.php';
 include_once __DIR__ . '/../../roles/model/rol.php';
 
-//$userInput = $_POST['usu_docum'];
-//$userPassword = $_POST['usu_clave'];
-//$userRol = $_POST['rol_id'];
-
 
 if (empty($userInput) || empty($userPassword) || empty($userRol)) {
   return;

@@ -12,9 +12,15 @@ header('Content-Type: application/json');
 
  $roles = new Rol();
 
- $dataRoles = $roles->fetchRol();
+ $data = $roles->fetchRol();
 
- echo json_encode($dataRoles);
+ $dataRoles = [
+    'status' => 'success',
+    'message' => 'Datos obtenidos correctamente',
+    $data
+];
+
+ echo json_encode($data);
 
 
 ?>

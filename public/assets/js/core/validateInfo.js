@@ -1,7 +1,7 @@
 const obje = {
   number: /^[0-9]{6,}$/,
   password: /^[a-zA-Z0-9@#%!()]{3,}$/,
-  email: /^[a-zA-Z0-9._%+-]{4,12}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  email: /^[0-9a-zA-Z._%+-]{4,30}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 };
 
 //Todo: modificar función que me permita validar los campos, su enfoque es eliminar los espacios en blanco y
