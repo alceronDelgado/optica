@@ -32,13 +32,18 @@ export const dataFetch = async (url, method = "GET", data = null) => {
     //Espero a que traiga todos los datos para después transformarlo en json.
     let json = await response.json();
 
-
     //Valido en caso de que no haya traido ningun recurso.
     if (!response.ok) {
-      throw new Error(`Error en la petición: ${response.status}`);
+      return{
+        statusCode: response.status,
+        data: json
+      }
     }
 
-    return json;
+    return {
+      statusCode: response.status,
+      data: json
+    };
 
   } catch (error) {
     console.log(error);

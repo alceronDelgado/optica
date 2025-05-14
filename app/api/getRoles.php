@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 //El enfoque de este apartado es recibir el la solicitud fetch y que este llame al modelo.
 
@@ -10,17 +10,22 @@ include_once __DIR__ . '/../modules/roles/model/rol.php';
 
 header('Content-Type: application/json');
 
- $roles = new Rol();
-
- $data = $roles->fetchRol();
-
- $dataRoles = [
-    'status' => 'success',
-    'message' => 'Datos obtenidos correctamente',
-    $data
-];
-
- echo json_encode($data);
+$roles = new Rol();
 
 
-?>
+if ($roles = $roles->fetchRol()) {
+    http_response_code(200);
+    echo json_encode([
+        'status' => true,
+        'message' => 'Recursos capturados correctamente.',
+        'data' => $roles
+    ]);
+} else {
+    http_response_code(404);
+    echo json_encode([
+        'status' => false,
+        'message' => 'Sin recursos',
+        'data' => []
+    ]);
+}
+

@@ -23,21 +23,21 @@
             <form action="" method="post" id="formLogin" class="">
                 <div class="input-field col s12">
                     <!-- La idea es renderizarlos desde js -->
-                    <select name="rolesId" id="rol_ids" class="">
+                    <select name="rol_id" id="rol_ids" class="">
 
                     </select>
                     <label for="rolesId" class="col s2">Rol:</label>
                 </div>
                 <div class="user input-field col s12">
                     <label for="usu_email">Email:</label>
-                    <input type="email" name="email" id="usu_email">
+                    <input type="email" name="usu_email" id="usu_email">
                     <div class="card-panel1">
                         <span class="red-text text-darken-2" id="spanEmail"></span>
                     </div>
                 </div>
                 <div class="password input-field col s12">
                     <label for="">Contraseña:</label>
-                    <input type="password" name="password" id="usu_clave">
+                    <input type="password" name="usu_clave" id="usu_clave">
                     <div class="card-panel1">
                         <span class="red-text text-darken-2" id="spanPassword"></span>
                     </div>

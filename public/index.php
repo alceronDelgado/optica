@@ -22,6 +22,7 @@ include_once __DIR__ . '/../app/core/getUrl.php';
     require_once $controllerFile;
 
     $login = new LoginController();
+    $login->login();
  }
  
 

@@ -1,11 +1,25 @@
+/**
+ * user : 29114652
+ * password: opt29
+ *
+ *
+ * user: 14362442
+ * password: oft14
+ *
+ * user: 63453452
+ * password: re6345
+ *
+ */
+
 import { validateData } from "./core/validateInfo.js";
 import { dataFetch } from "./core/fetch.js";
-import { succesAlt } from "./core/alerts.js";
+import { loading, succesAlt } from "./core/alerts.js";
 document.addEventListener("DOMContentLoaded", function () {
-  let formLogin = document.querySelector('#formLogin');
+  let formLogin = document.querySelector("#formLogin");
   let usuario = document.querySelector("#usu_email");
   let password = document.querySelector("#usu_clave");
   let rol = document.querySelector("#rol_id");
+  let rolInput = document.querySelector("#rol_ids");
   let usuarioTye = usuario.type;
   let passwordTye = password.type;
 
@@ -28,42 +42,43 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   /**
-   * traigo los roles, si en este archivo implemento mu
-   * 
+   * Traigo los roles usando fetch pero esperando su respuesta, usando async y await. 
+   * Puedo implementarla también con then.
+   *
    */
-  let datRol = dataFetch("app/api/getRoles.php", 'GET').then((roles)=>{
-    let rolInput = document.querySelector('#rol_ids');
-    
-    rolInput.innerHTML = "<option disabled selected>Seleccione un rol</option>";
-    roles.forEach(rl => {
-      let optionInput = document.createElement('option');
-      optionInput.value = rl.rol_id;
-      optionInput.innerText = rl.rol_nombre;
-      rolInput.appendChild(optionInput);
+  const getRoles = async () => {
+    let { statusCode, data } = await dataFetch("app/api/getRoles.php", "GET");
+    let dataRoles = null;
+    if (statusCode === 200 && data.status) {
+      dataRoles = data.data;
+      console.log(statusCode);
 
-    });
+      rolInput.innerHTML = "<option disabled selected>Seleccione un rol</option>";
+      dataRoles.forEach((dtRol) => {
+        let optionInput = document.createElement("option");
+        optionInput.value = dtRol.rol_id;
+        optionInput.innerText = dtRol.rol_nombre;
+        rolInput.appendChild(optionInput);
+      });
+    }
 
-
-    //Inicializar los elementos select. Esto es importante porque materialize pide renderizar los input.
+    //   //Inicializar los elementos select. Esto es importante porque materialize pide renderizar los input.
     M.FormSelect.init(rolInput);
+  };
 
-
-  });
+  getRoles();
 
   //Evento submit del formulario.
-  formLogin.addEventListener("submit", (f)=>{
+  formLogin.addEventListener("submit", (f) => {
     f.preventDefault();
     f.stopPropagation();
     const form = new FormData(formLogin);
     const data = Object.fromEntries(form.entries());
 
-    dataFetch("app/api/getUser.php", 'POST',data);
+    dataFetch("app/api/getUser.php", "POST", data);
 
+    // loading('Validando datos ingresados...').then(()=>{
 
+    // });
   });
-
-
-  
-
-
 });

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../config/conn.php';
+//require_once __DIR__ . '/../config/conn.php';
 //Esta clase debe de validar si los datos que ingreso son iguales a los de la base de datos.
 
 //Clase que va a servir para autenticar los datos ingresados por el usuario.
@@ -13,7 +13,7 @@ require_once __DIR__ . '/../config/conn.php';
 class Auth
 {
 
-  private $user;
+  private $email;
 
   private $password;
 
@@ -24,40 +24,18 @@ class Auth
   private ?array $usuario = null;
 
 
-  public function __construct(String $password, String $user, Int $rol)
+  public function __construct(string $email, string $password, int $rol, ?array $usuario = null)
   {
-    $this->user = $user;
+    $this->email = $email;
     $this->password = $password;
     $this->rol = $rol;
-
-    //Creo una instancia de la clase.
-    $conn = new Conn();
-    $this->conn = $conn->getConnection();
-
-
-    /**
-     * Aca asigno 2 funciones que van a consultar los datos y de paso van a validar también si estos datos son correctos.
-     * 
-     */
-    $usuario = $this->getUserByCredentials();
+    $this->usuario = $usuario;
   }
 
-  //Esta función me sirve para traer la información del usuario para saber si existe o no.
-  public function getUserByCredentials(): ?array
-  {
-    $sqlQuery = "SELECT usu_nombre, usu_docum, usu_clave, rol_id FROM usuarios WHERE usu_nombre = :usu_nombre AND usu_docum = :usu_docum AND rol_id = :rol_id";
-
-    $stmt = $this->conn->prepare($sqlQuery);
-    $stmt->bindParam(':usu_nombre', $this->user);
-    $stmt->bindParam(':rol_id', $this->rol);
-    $stmt->bindParam(':usu_docum', $this->user);
-    $stmt->execute();
-
-    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $usuario ?: null;
-  }
-
-  //
+  /**
+   * Summary of checkCredentials Esta función me debe de comparar los datos enviados por el usuario con los de la base de datos, retornar un true en caso de esos datos sean iguales y la password hasheada también.
+   * @return bool
+   */
   public function checkCredentials(): bool
   {
     //Creo el objeto usuario para comparar con los datos ingresados.
@@ -68,6 +46,12 @@ class Auth
       return false;
     }
     //CUANDO VAYA A REGISTRAR UN USUARIO, SI O SI DEBO DE HACER UN PASSWORD HASH CON LA OPCIÓN PASSWORD HASH_DEFAULT.
+
+    //Este error log lo puse para saber si me esta validando todo con la contraseña... lo encuentro en el xampp.
+    error_log('Login exitoso');
+
+   
+
 
     return true;
   }
