@@ -13,7 +13,7 @@
 
 import { validateData } from "./core/validateInfo.js";
 import { dataFetch } from "./core/fetch.js";
-import { loading, succesAlt } from "./core/alerts.js";
+import { loading, loginSuccess, succesAlt } from "./core/alerts.js";
 document.addEventListener("DOMContentLoaded", function () {
   let formLogin = document.querySelector("#formLogin");
   let usuario = document.querySelector("#usu_email");
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   /**
-   * Traigo los roles usando fetch pero esperando su respuesta, usando async y await. 
+   * Traigo los roles usando fetch pero esperando su respuesta, usando async y await.
    * Puedo implementarla también con then.
    *
    */
@@ -51,9 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let dataRoles = null;
     if (statusCode === 200 && data.status) {
       dataRoles = data.data;
-      console.log(statusCode);
 
-      rolInput.innerHTML = "<option disabled selected>Seleccione un rol</option>";
+      rolInput.innerHTML =
+        "<option disabled selected>Seleccione un rol</option>";
       dataRoles.forEach((dtRol) => {
         let optionInput = document.createElement("option");
         optionInput.value = dtRol.rol_id;
@@ -68,17 +68,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
   getRoles();
 
+  let userData = {};
   //Evento submit del formulario.
   formLogin.addEventListener("submit", (f) => {
     f.preventDefault();
     f.stopPropagation();
     const form = new FormData(formLogin);
-    const data = Object.fromEntries(form.entries());
+    userData = Object.fromEntries(form.entries());
 
-    dataFetch("app/api/getUser.php", "POST", data);
+    const getData = async () => {
 
-    // loading('Validando datos ingresados...').then(()=>{
 
-    // });
+      let { statusCode, data } = await dataFetch(
+        "/optica/app/api/getUser.php",
+        "POST",
+        userData
+      );
+
+      if (statusCode === 200 && data.status) {
+        return {
+          success: true,
+          message: data.message
+        };
+      }
+
+      return {
+        success: false,
+        message: data?.message || 'Error en autenticación'
+      };
+    };
+
+    //Limpiar formulario después de redireccionar.
+    //formLogin.reset();
+
+    loginSuccess("/optica/app/dashboard.php", "Cargando...", getData);
   });
 });

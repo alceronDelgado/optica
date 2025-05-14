@@ -1,7 +1,7 @@
 /**
  * @param {String} url - url en donde vamos a solicitar los recursos que vamos a utilizar.
  * @param {String} method - método de envio [GET, PUT,PULL,POST];
- * @returns {Promise<object>} - Respuesta del json después de ejecutar la función.
+ * @returns {Promise<object>} 
  * 
  * 
  */
@@ -30,7 +30,15 @@ export const dataFetch = async (url, method = "GET", data = null) => {
     let response = await fetch(url, options);
 
     //Espero a que traiga todos los datos para después transformarlo en json.
-    let json = await response.json();
+    let json = null;
+    try {
+    json = await response.json();
+      
+    } catch (e) {
+       throw new Error(`No se pudo parsear la respuesta como JSON. Posiblemente no se encontró el recurso (${response.status})`);
+    }
+
+
 
     //Valido en caso de que no haya traido ningun recurso.
     if (!response.ok) {
@@ -46,7 +54,11 @@ export const dataFetch = async (url, method = "GET", data = null) => {
     };
 
   } catch (error) {
-    console.log(error);
+    console.error("Fallo en dataFetch:", error.message);
+  return {
+    statusCode: 500,
+    data: { status: false, message: error.message }
+  };
   }
 };
 

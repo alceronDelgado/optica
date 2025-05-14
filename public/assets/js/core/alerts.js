@@ -15,8 +15,8 @@ export const errorAlert = (text = "") => {
   });
 };
 
-export const loginSuccess = (redirectUrl = '/index.php',title = "") => {
-  return Swal.fire({
+export const loginSuccess = async (redirectUrl = '/index.php',title = "",getDataFn) => {
+  await Swal.fire({
     icon: "info",
     title: title,
     showCancelButton: false,
@@ -24,19 +24,48 @@ export const loginSuccess = (redirectUrl = '/index.php',title = "") => {
     timer: 3000,
     timerProgressBar: true,
     //El bloque didOpen se ejecuta SOLO CUANDO se abre el PopUp
-    didOpen: () => {
+    didOpen: async () => {
       //Muestra en mi mensaje de alerta el modal de cargando.
       Swal.showLoading();
-      setInterval(() => {}, 1000);
+
+      try {
+
+        const result = await getDataFn();
+
+      Swal.close();
+
+      if (result.success) {
+        await Swal.fire({
+          icon: 'success',
+          title: '¡Éxito!',
+          text: result.message,
+          timer: 2000,
+          showConfirmButton: false
+        });
+        window.location.href = redirectUrl;
+      } else {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: result.message,
+          showConfirmButton: true
+        });
+      }
+        if (!result) {
+          return;
+        }
+      } catch (error) {
+        
+      }
     },
     willClose: () => {
-      clearInterval();
+      
       Swal.close();
     },
-  }).then(() => {
-    //Redireccionar.
-    window.location.href = redirectUrl;
   });
+
+
+  
 };
 
 
